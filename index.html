@@ -28,6 +28,7 @@
             //data array
             var data = [];
             var deviceData = [];
+            var phoneData=[]
 
             //red_marker
             var redIcon = L.icon({
@@ -62,7 +63,7 @@
             var myzoom = '10';
             var map = L.map('mapid').setView([mylat, mylon], myzoom);
             L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar'}).addTo(map); 
-            var phoneData = [
+            var districts = [
                 [12.51580947, -16.22216687], //ziguinchor
                 [12.47418596, -16.61544292], //oussouye
                 [12.906471, -16.16068321], //bignona
@@ -143,35 +144,42 @@
                 [14.39058989, -16.52920706], //fatick
                 [14.72877149, -17.27537563], //rufisque
             ]; 
+            var markers=[]; //marker array
+            var circles=[]; //circles array
 
             //add many markers using a loop 
-                phoneData.forEach(function(point){
-                    L.marker([point[0], point[1]], {icon: redIcon}).addTo(map).bindPopup("données");  
-                    var circle = L.circle([point[0], point[1]], {
+                districts.forEach(function(point){
+                    var marker=L.marker([point[0], point[1]], {icon: redIcon}).addTo(map).bindPopup("données");
+                    markers.push(marker);  
+                    var circle= L.circle([point[0], point[1]], {
                         color: 'blue',
                         fillColor: '#f03',
                         fillOpacity: 0.5, //après mettre à zero pour faire disparaitre
                         radius: 1000
                     }).addTo(map);
+                    circles.push(circle);
          
                 });
 
             //logic to change the marker icon 
             var match = []
-            var latlng_circle = new L.LatLng(mylat, mylon) //mettre un array de tous les rayon des districts après et parcourir
             var latlng_phone;
 
             //execute every 5mn 
 
             setInterval(function(){
+            circles.forEach(function(latlng_circle){
                 phoneData.forEach(function (location) {
-                        latlng_phone = new L.LatLng(location.pos[0], location.pos[1]); //create a geographical point with the given lat and long
+                        latlng_phone = new L.LatLng(location[0], location[1]); //create a geographical point with the given lat and long
                         if (latlng_circle.distanceTo(latlng_phone) < 1000) { 
                             match.push(location); 
+                            console.log("okk");
                             //change the marker icon to orange
-                            L.marker([mylat, mylon], {icon: orangeIcon}).addTo(map).bindPopup(); //add phoneData
+                            L.marker([location.pos[0], location.pos[1]], {icon: orangeIcon}).addTo(map).bindPopup(); //add phoneData
                         }
                 });
+
+            });
 
             }, 5*1000);
 
