@@ -9,7 +9,6 @@
         <link rel="stylesheet" type="text/css" href="main.css" /> 
 
         <script type="text/javascript" src="leaflet/leaflet.js" ></script>
-        <!-- <script type="text/javascript" src="main.js" ></script> -->
         <script type="text/javascript" src="jquery.min.js" ></script>
 
         
@@ -28,11 +27,16 @@
             //data array
             var data = [];
             var deviceData = [];
-            var phoneData=[]
+            //test
+            var phoneData=[
+                [14.77684264, -17.35403951], //yeumbeul
+                [14.39058989, -16.52920706], //fatick
+                [14.72877149, -17.27537563], //rufisque
+            ]
 
             //red_marker
             var redIcon = L.icon({
-                iconUrl: 'icon/map-marker.png', 
+                iconUrl: 'icon/map-marker-r.png', 
 
                 iconSize:     [24, 24], // size of the icon
                 iconAnchor:     [12, 24], // icon position 
@@ -40,7 +44,7 @@
             });   
             //orange_marker
             var orangeIcon = L.icon({
-                iconUrl: 'icon/leaf-orange.png', 
+                iconUrl: 'icon/map-marker-o.png', //à changer
 
                 iconSize:     [24, 24], 
                 iconAnchor:     [12, 24], 
@@ -49,7 +53,7 @@
             
             //green_marker
             var greenIcon = L.icon({
-                iconUrl: 'icon/leaf-green.png', 
+                iconUrl: 'icon/map-marker-g.png', //à changer
 
                 iconSize:     [24, 24],
                 iconAnchor:     [12, 24],
@@ -58,11 +62,13 @@
 
 
             //initializing map 
-            var mylat = '14.745239';
-            var mylon = '-17.490361';
+            var mylat = '14.71005856';
+            var mylon = '-17.17218771';
             var myzoom = '10';
             var map = L.map('mapid').setView([mylat, mylon], myzoom);
             L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar'}).addTo(map); 
+
+            //fary proposed the idea of ​​saving the coordinates in a database
             var districts = [
                 [12.51580947, -16.22216687], //ziguinchor
                 [12.47418596, -16.61544292], //oussouye
@@ -149,12 +155,12 @@
 
             //add many markers using a loop 
                 districts.forEach(function(point){
-                    var marker=L.marker([point[0], point[1]], {icon: redIcon}).addTo(map).bindPopup("données");
+                    var marker=L.marker([point[0], point[1]], {icon: redIcon}).addTo(map).bindPopup("mettre des données");
                     markers.push(marker);  
                     var circle= L.circle([point[0], point[1]], {
-                        color: 'blue',
+                        color: '',
                         fillColor: '#f03',
-                        fillOpacity: 0.5, //après mettre à zero pour faire disparaitre
+                        fillOpacity: 0, //hidden
                         radius: 1000
                     }).addTo(map);
                     circles.push(circle);
@@ -162,31 +168,82 @@
                 });
 
             //logic to change the marker icon 
-            var match = []
+
+            //function contain to check wether an object is in an array or not
+            function contain(array,object){
+                let state=false;
+                for (elt of array){
+                    if(elt[0]==object[0] && elt[1]==object[1]){
+                        state=true;
+                        break;
+                    }
+                }
+
+                return state;
+
+            }
+
+            var marked=[];
+            var match = [];
             var latlng_phone;
 
-            //execute every 5mn 
+            //execute every 2s
 
-            setInterval(function(){
-            circles.forEach(function(latlng_circle){
+     var runLogic=setInterval(function(){
+            circles.forEach(function(circle){
+                latlng_circle=circle.getLatLng();
                 phoneData.forEach(function (location) {
                         latlng_phone = new L.LatLng(location[0], location[1]); //create a geographical point with the given lat and long
-                        if (latlng_circle.distanceTo(latlng_phone) < 1000) { 
-                            match.push(location); 
-                            console.log("okk");
+                        if (latlng_phone.distanceTo(latlng_circle) < 1000 && !contain(marked,location)) { 
+                            //match.push(location); 
                             //change the marker icon to orange
-                            L.marker([location.pos[0], location.pos[1]], {icon: orangeIcon}).addTo(map).bindPopup(); //add phoneData
+                            L.marker([location[0], location[1]], {icon: orangeIcon}).addTo(map).bindPopup("ajouter des données" +"<br>"+
+                            "<div>"+
+                            "<span class='lat'>lat: "+location[0]+"</span>"+ "<br>"+"<span class='lng'>lng: "+location[1]+"</span>"+ "<br><br>"+
+                            "<button style='background-color:#4cd137; border-radius:5px;' type='button' class='btn btn-success'>marquer</button>"+"</div>"); 
                         }
                 });
 
             });
 
-            }, 5*1000);
+
+
+             //catch the click event on the buttons
+            
+            let btnElts=document.getElementsByClassName("btn"); 
+            for(let btn of btnElts){
+                 btn.addEventListener("click",function(e){
+                     //we get coodinates
+                     let current_lat=btn.parentElement.children[0].textContent.split(":")[1].trim();
+                     let current_lng=btn.parentElement.children[2].textContent.split(":")[1].trim();
+                     //change the icon to green
+                     let m=L.marker([current_lat, current_lng], {icon: greenIcon}).addTo(map).bindPopup("mettre des données");
+                     marked.push([parseFloat(current_lat),parseFloat(current_lng)]);
+                     console.log(marked);
+    
+    });
+
+}
+
+ }, 1000);
+
+
+
+
+
+
+
+
+
+
+    
+
+
 
 
 
                     
-            //ajax request to get phone Coordinates
+            //ajax request to get phone Coordinates and data
             //Screening phone Coordinates on the map		
             // $.ajax({
             //     type: 'GET',
