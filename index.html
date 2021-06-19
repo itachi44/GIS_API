@@ -1,11 +1,13 @@
  <!DOCTYPE html>
 
 <html>
-    <header>
+    <head>
         <meta charset="UTF-8">
         
         <link rel="stylesheet" type="text/css" href="leaflet/leaflet.css" /> 
         <link rel="stylesheet" type="text/css" href="main.css" /> 
+        <link rel="shortcut icon" type="image/png" href="icon/favicon.png" />
+
 
         <script type="text/javascript" src="leaflet/leaflet.js" ></script>
         <script type="text/javascript" src="jquery.min.js" ></script>
@@ -15,14 +17,63 @@
         <title>GIS Suivi du déploiement</title>
         
 
-    </header>
+    </head>
 
     <body>
+        <p class="text-center">Suivi du déploiement de l'application Teranga</p>
 
-        <div id="mapid"></div>
+        <style>
+            body{
+                margin: 0;
+                padding: 0;
+            }
+            .text-center{
+                right: 35%;
+                position:absolute;
+                top: 0;
+                margin: 0;
+                color: rgba(0,88,156,255);
+                font-size: 1.4em;
+                text-decoration: underline;
+            }
+            #mapid{
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                width: 100%;
+                height: 90%;
+              }
+        </style>
+
+        <div class="container" id="mapid"></div>
 
         <script >
 
+
+
+            // ajax request 
+            const xhr = new XMLHttpRequest();
+            let url='http://10.1.7.38:3000/phoneLocation';
+            
+            xhr.open("GET", url, true); //testé avec 'https://api.github.com/emojis'
+            xhr.responseType = "json";
+            xhr.send();
+
+            xhr.onload = function(){
+                console.log(xhr.response);
+                if (xhr.status != 200){ 
+                    console.log("Une erreur est survenue");
+                }else{ 
+                    let data = xhr.response;
+                    console.log(xhr.response.length + " octets  téléchargés\n" + JSON.stringify(data));
+                }
+            };
+        
+            xhr.onerror = function(){
+                console.log("La requête a échoué");
+            };
+
+            
 
 
 
@@ -219,6 +270,17 @@
                 return state;
 
             }
+            //function to get the index of geographical point
+            function getIndex(array,object){
+                let index=-1;
+                for(let i=0; i<array.length ;i++){
+                    if(array[i][0]==object[0] && array[i][1]==object[1]){
+                        index=i;
+                        break;
+                    }
+                }
+                return index;
+            }
             //load marked locations array
             let marked=[];
             marked=JSON.parse(localStorage.getItem("marked_locations"));
@@ -229,10 +291,11 @@
 
      let runLogic=setInterval(function(){
         marked.forEach(function(item){
-            L.marker([item[0], item[1]], {icon: greenIcon}).addTo(map).bindPopup("Etat du déploiement: en cours" +"<br>"+
+            L.marker([item[0], item[1]], {icon: greenIcon}).addTo(map).bindPopup("Etat du déploiement: terminé" +"<br>"+
             "<div>"+
             "<span class='lat'>lat: "+item[0]+"</span>"+ "<br>"+"<span class='lng'>lng: "+item[1]+"</span>"+ "<br><br>"+
-            "<button style='background-color:#4cd137; border-radius:5px;' type='button' class='btn btn-success'>marquer</button>"+"</div>"); 
+            "<button style='background-color:#F21D00;color:#fff; border-radius:5px; margin-right:20%;' type='button' class='btn takeOf'>enlever</button>"+
+            "<span style='color:#4DA5F6; text-decoration:underline;'>Détails</span>"+ "</div>"); 
         });
 
             circles.forEach(function(circle){
@@ -245,7 +308,8 @@
                             L.marker([location[0], location[1]], {icon: orangeIcon}).addTo(map).bindPopup("Etat du déploiement: en cours" +"<br>"+
                             "<div>"+
                             "<span class='lat'>lat: "+location[0]+"</span>"+ "<br>"+"<span class='lng'>lng: "+location[1]+"</span>"+ "<br><br>"+
-                            "<button style='background-color:#4cd137; border-radius:5px;' type='button' class='btn btn-success'>marquer</button>"+"</div>"); 
+                            "<button style='background-color:#6DC300; color:#fff; border-radius:5px; margin-right:20%;' type='button' class='btn btn-success'>marquer</button>"+ 
+                            "<span style='color:#4DA5F6; text-decoration:underline;'>Détails</span>"+ "</div>"); 
                         }
                 });
 
@@ -277,7 +341,35 @@
 
 }
 
- }, 2000);
+            let btnTakeOf=document.getElementsByClassName("takeOf"); 
+            for(let btn of btnTakeOf){
+                btn.addEventListener("click",function(e){
+                    //we get coodinates
+                    let current_lat=btn.parentElement.children[0].textContent.split(":")[1].trim();
+                    let current_lng=btn.parentElement.children[2].textContent.split(":")[1].trim();
+                    //change the marker to orange
+                    L.marker([current_lat, current_lng], {icon: orangeIcon}).addTo(map).bindPopup("Etat du déploiement: en cours"+"<br>");
+
+                    //get index of the point
+                    let index=getIndex(marked,[parseFloat(current_lat), parseFloat(current_lng)]);
+                    //remove it to marked points
+                    marked.splice(index,[parseFloat(current_lat), parseFloat(current_lng)]);
+
+                    //save 
+                    if(typeof(Storage)!=="undefined"){
+                        localStorage.setItem("marked_locations", JSON.stringify(marked))
+                        }else{
+                                  console.log("not supported!!!")
+                            }
+
+                   
+   
+   });
+
+}
+
+
+ }, 1000);
 
 
 
