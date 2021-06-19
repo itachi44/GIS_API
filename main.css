@@ -1,0 +1,50 @@
+#mapid { 
+    width: 800px;
+    height: 550px;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+
+#legende {
+    text-align: left;
+}
+
+#blue {
+    color: blue;
+    font-size: 25px;
+}
+
+#red {
+    color: red;
+    font-size: 25px;
+}
+
+
+table {
+    border-collapse: collapse;
+    letter-spacing: 1px;
+    font-family: sans-serif;
+    font-size: .8rem;
+}
+
+td {
+    padding: 10px;
+    text-align: center;
+}
+
+nav {
+    text-align: center;
+    margin: 0 auto;
+}
+
+nav button {
+    margin-right: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 2px solid #33B5FF;
+}
+
+button:hover {
+    background-color: #B0F2FF; /* Green */
+    color: black;
+  }
