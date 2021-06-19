@@ -50,8 +50,9 @@
         <script >
 
 
-
+            //
             // ajax request 
+            /*
             const xhr = new XMLHttpRequest();
             let url='http://10.1.7.38:3000/phoneLocation';
             
@@ -72,6 +73,7 @@
             xhr.onerror = function(){
                 console.log("La requête a échoué");
             };
+            */
 
             
 
@@ -281,6 +283,7 @@
                 }
                 return index;
             }
+
             //load marked locations array
             let marked=[];
             marked=JSON.parse(localStorage.getItem("marked_locations"));
@@ -328,7 +331,10 @@
                      //change the icon to green
                      map.closePopup();
                      let m=L.marker([current_lat, current_lng], {icon: greenIcon}).addTo(map).bindPopup("Etat du déploiement: terminé"+"<br>");
-                     marked.push([parseFloat(current_lat),parseFloat(current_lng)]);
+                     if(!contain(marked,[parseFloat(current_lat), parseFloat(current_lng)])){
+                         console.log("adding the point...");
+                            marked.push([parseFloat(current_lat),parseFloat(current_lng)]);
+                     }
                      //web storage to store the marked locations
 
                     if(typeof(Storage)!=="undefined"){
@@ -352,9 +358,9 @@
 
                     //get index of the point
                     let index=getIndex(marked,[parseFloat(current_lat), parseFloat(current_lng)]);
-                    //remove it to marked points
-                    marked.splice(index,[parseFloat(current_lat), parseFloat(current_lng)]);
-
+                    //remove the point occurences to marked points
+                    
+                    marked.splice(index,1);
                     //save 
                     if(typeof(Storage)!=="undefined"){
                         localStorage.setItem("marked_locations", JSON.stringify(marked))
