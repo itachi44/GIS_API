@@ -1,5 +1,4 @@
- 
-<!DOCTYPE html>
+ <!DOCTYPE html>
 
 <html>
     <header>
@@ -13,7 +12,7 @@
 
         
 
-        <title>leaflet Location</title>
+        <title>GIS Suivi du déploiement</title>
         
 
     </header>
@@ -24,14 +23,52 @@
 
         <script >
 
+
+
+
+
+                    
+            //ajax request to get phone Coordinates and data
+            //Screening phone Coordinates on the map		
+            // $.ajax({
+            //     type: 'GET',
+            //     data: JSON.stringify(data),
+            //     contentType: 'application/json',
+            //     url: 'http://10.1.7.38:3000/phoneLocation',						
+            //     success: function(data) { 
+                    
+            //         $.each(data, function(key, value){
+            //             phoneData.push([value.latitude, value.longitude]);
+            //         });
+            //         var phoneLine = L.polyline(phoneData).addTo(map); 
+
+            //         //add many markers using a loop interval 
+            //         var i = 0;
+
+            //             L.marker([data[i]['latitude'], data[i]['longitude']], {icon: blueIcon}).addTo(map).bindPopup("<table> <tr> <th>time: </th><td>" + data[i]['time'] + "</td> </tr> <tr> <th>temperature:</th><td>" + data[i]['latitude'] + "</td></tr> <tr><th>humidity:</th><td>" + data[i]['longitude'] + "</td></tr> </table>");
+    
+            //             if (++i === data.length) {
+            //                 window.clearInterval(intervalMarker);
+            //             } 
+            //         //test popup in a marker 
+            //     }
+            // });
+           
+
+
             //data array
             var data = [];
             var deviceData = [];
-            //test
+            //coordinates for test
             var phoneData=[
                 [14.77684264, -17.35403951], //yeumbeul
                 [14.39058989, -16.52920706], //fatick
                 [14.72877149, -17.27537563], //rufisque
+                [14.20339805, -14.85714566], //koungueul
+                [14.12869694, -15.44638518], //kaffrine
+                [14.04959593, -15.68222738], //birkelane
+                [14.76648767, -16.21636758], //diourbel 
+                [14.80147197, -16.48308766], //bambey
             ]
 
             //red_marker
@@ -155,11 +192,11 @@
 
             //add many markers using a loop 
                 districts.forEach(function(point){
-                    var marker=L.marker([point[0], point[1]], {icon: redIcon}).addTo(map).bindPopup("mettre des données");
+                    var marker=L.marker([point[0], point[1]], {icon: redIcon}).addTo(map).bindPopup("Etat du déploiement: pas encore commencé");
                     markers.push(marker);  
                     var circle= L.circle([point[0], point[1]], {
                         color: '',
-                        fillColor: '#f03',
+                        fillColor: '',
                         fillOpacity: 0, //hidden
                         radius: 1000
                     }).addTo(map);
@@ -182,22 +219,30 @@
                 return state;
 
             }
-
-            var marked=[];
-            var match = [];
-            var latlng_phone;
+            //load marked locations array
+            let marked=[];
+            marked=JSON.parse(localStorage.getItem("marked_locations"));
+            let match = [];
+            let latlng_phone;
 
             //execute every 2s
 
-     var runLogic=setInterval(function(){
+     let runLogic=setInterval(function(){
+        marked.forEach(function(item){
+            L.marker([item[0], item[1]], {icon: greenIcon}).addTo(map).bindPopup("Etat du déploiement: en cours" +"<br>"+
+            "<div>"+
+            "<span class='lat'>lat: "+item[0]+"</span>"+ "<br>"+"<span class='lng'>lng: "+item[1]+"</span>"+ "<br><br>"+
+            "<button style='background-color:#4cd137; border-radius:5px;' type='button' class='btn btn-success'>marquer</button>"+"</div>"); 
+        });
+
             circles.forEach(function(circle){
                 latlng_circle=circle.getLatLng();
                 phoneData.forEach(function (location) {
                         latlng_phone = new L.LatLng(location[0], location[1]); //create a geographical point with the given lat and long
-                        if (latlng_phone.distanceTo(latlng_circle) < 1000 && !contain(marked,location)) { 
+                        if (latlng_phone.distanceTo(latlng_circle) < 1000 && !contain(marked,location)) { //compute the distance using cosinus law
                             //match.push(location); 
                             //change the marker icon to orange
-                            L.marker([location[0], location[1]], {icon: orangeIcon}).addTo(map).bindPopup("ajouter des données" +"<br>"+
+                            L.marker([location[0], location[1]], {icon: orangeIcon}).addTo(map).bindPopup("Etat du déploiement: en cours" +"<br>"+
                             "<div>"+
                             "<span class='lat'>lat: "+location[0]+"</span>"+ "<br>"+"<span class='lng'>lng: "+location[1]+"</span>"+ "<br><br>"+
                             "<button style='background-color:#4cd137; border-radius:5px;' type='button' class='btn btn-success'>marquer</button>"+"</div>"); 
@@ -217,15 +262,24 @@
                      let current_lat=btn.parentElement.children[0].textContent.split(":")[1].trim();
                      let current_lng=btn.parentElement.children[2].textContent.split(":")[1].trim();
                      //change the icon to green
-                     let m=L.marker([current_lat, current_lng], {icon: greenIcon}).addTo(map).bindPopup("mettre des données");
+                     map.closePopup();
+                     let m=L.marker([current_lat, current_lng], {icon: greenIcon}).addTo(map).bindPopup("Etat du déploiement: terminé"+"<br>");
                      marked.push([parseFloat(current_lat),parseFloat(current_lng)]);
-                     console.log(marked);
+                     //web storage to store the marked locations
+
+                    if(typeof(Storage)!=="undefined"){
+                    localStorage.setItem("marked_locations", JSON.stringify(marked))
+                    }else{
+                              console.log("not supported!!!")
+                        }
     
     });
 
 }
 
- }, 1000);
+ }, 2000);
+
+
 
 
 
@@ -238,37 +292,6 @@
 
     
 
-
-
-
-
-                    
-            //ajax request to get phone Coordinates and data
-            //Screening phone Coordinates on the map		
-            // $.ajax({
-            //     type: 'GET',
-            //     data: JSON.stringify(data),
-            //     contentType: 'application/json',
-            //     url: 'http://10.1.7.38:3000/phoneLocation',						
-            //     success: function(data) { 
-                    
-            //         $.each(data, function(key, value){
-            //             phoneData.push([value.latitude, value.longitude]);
-            //         });
-            //         var phoneLine = L.polyline(phoneData).addTo(map); 
-
-            //         //add many markers using a loop interval 
-            //         var i = 0;
-
-            //             L.marker([data[i]['latitude'], data[i]['longitude']], {icon: blueIcon}).addTo(map).bindPopup("<table> <tr> <th>time: </th><td>" + data[i]['time'] + "</td> </tr> <tr> <th>temperature:</th><td>" + data[i]['latitude'] + "</td></tr> <tr><th>humidity:</th><td>" + data[i]['longitude'] + "</td></tr> </table>");
-    
-            //             if (++i === data.length) {
-            //                 window.clearInterval(intervalMarker);
-            //             } 
-            //         //test popup in a marker 
-            //     }
-            // });
-           
 
 
         </script> 
