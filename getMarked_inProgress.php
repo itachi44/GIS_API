@@ -33,10 +33,14 @@ if($_SERVER['REQUEST_METHOD'] == 'GET') {
 		echo json_encode($tableauMarked);
 
 	} else {
+		$mark = [
+			"latitude" => 0,
+			"longitude" => 0,
+			"district"  => null
+		];
+		$tableauMarked['marked_locations'][] = $mark;
 
-		// handle the error
-		http_response_code(405);
-		echo json_encode(["message" => "il n'y a pas de données dans la table"]) ;
+		echo json_encode($tableauMarked);
 	}
 
 

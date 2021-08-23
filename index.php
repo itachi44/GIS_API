@@ -135,6 +135,19 @@
                 }
                 return district;
             }
+            //function to find a marker index
+            function getMarkerIndex(coordinates,markers){
+                let index=-1;
+                for(let i=0; i<markers.length; i++){
+                    if(coordinates[0]==markers[i]._latlng.lat && coordinates[1]==markers[i]._latlng.lng){
+                        index=i;
+                        break;
+                    }
+                }
+
+                return index;
+            }
+
 
 
             //initializing map 
@@ -147,21 +160,25 @@
             L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar'}).addTo(map); 
             let markers=[]; //marker array
             let circles=[]; //circles array
-            let result=[]; //result of ajax request
+            let ajaxresult=[]; //result of ajax request
             let districts=[]; //districts we have after processing the result
+            let marked_inProgress=[];
+            let marked_completed=[];
+
 
 /*-----------------------------------------------------------------------------------------------------------------*/
-setTimeout(() => {
-    $.ajax({
+async function getDistrictsData() {
+    let result;
+    result= await $.ajax({
                  type: 'GET',
                  contentType: 'application/json',
                  url: 'getDistrictsData.php',						
                  success: function(data) { 
                          for(let item of data.centroids79districts){
-                             result.push(item);
+                             ajaxresult.push(item);
                          }
-                         result.shift();
-                         result.forEach(function(elt){
+                         ajaxresult.shift();
+                         ajaxresult.forEach(function(elt){
                             districts.push([elt.latitude,elt.longitude,elt.district_sanitaire]);
 
                              })
@@ -172,30 +189,24 @@ setTimeout(() => {
                     marker.addTo(map).bindPopup("Etat du déploiement: pas encore commencé"+"<br>"+"<span>District: "+point[2]+"</span>" +
                     "<br><br>"+
                     "<div style='text-align:center;'><button style='background-color:#00a8ff;color:#fff; border-radius:5px; ' type='button' class='btn commencer'>Commencer</button></div>");
-                    markers.push(marker);  
-                    let circle= L.circle([point[0], point[1]], {
-                        color: '',
-                        fillColor: '',
-                        fillOpacity: 0, //hidden
-                        radius: 1000
-                    }).addTo(map);
-                    circles.push(circle);
+                    markers.push(marker); 
          
                 });
-                    //handle error
+                    //return markers;
                  },
                  error: function (error) {
-                     console.log(error)
+                     console.log(error);
                  },
 
              });
 
-    
-}, 500);
+    return markers;
+}
 
-setTimeout(() => {     
-      //
-                $.ajax({
+//ajax1
+async function getMarkedInProgess() {
+    let ajax1Result;
+    ajax1Result= $.ajax({
                  type: 'GET',
                  contentType: 'application/json',
                  url: 'getMarked_inProgress.php',
@@ -211,6 +222,7 @@ setTimeout(() => {
                              })
                      }
                      console.log("data loaded");
+                     return marked_inProgress;
                  },
                  error: function(error){
                     console.log(error)
@@ -218,8 +230,12 @@ setTimeout(() => {
                  }
 
                 });
-                //
-                $.ajax({
+                return marked_inProgress;
+}
+//ajax2
+async function getMarkedCompleted() {
+    let ajax2Result;
+    ajax2Result= $.ajax({
                  type: 'GET',
                  contentType: 'application/json',
                  url: 'getMarked_completed.php',
@@ -242,25 +258,22 @@ setTimeout(() => {
                  }
 
                 });
-            }, 500);
-/*-----------------------------------------------------------------------------------------------------------------*/
+                return marked_completed;
+}
+const ajaxResults = () => {   
+$.when(getDistrictsData(),getMarkedInProgess(),getMarkedCompleted()).then(function(markers,marked_inProgress,marked_completed){
 
-        //logic to change the marker icon 
-
-
-            //load marked locations array from the database for the moment we use local storage
-             
-            let marked_inProgress=[];
-            let marked_completed=[];
-            /*
-            marked=JSON.parse(localStorage.getItem("marked_inProgress_locations"));*/
-            let latlng_phone;
-
-            //execute every 0.5s
+//logic to change the marker icon 
+//execute every 0.5s
 function runLogic(){
      setTimeout(function(){
         if(marked_inProgress.length!=0){
         marked_inProgress.forEach(function(item){
+            //TODO chercher l'index du marker de latitude item[0] et de longitude item[1] puis le supprimer
+            let index=getMarkerIndex([item[0],item[1]],markers);
+            if(index!=-1){
+                map.removeLayer(markers[index]);
+            }
             L.marker([item[0], item[1]], {icon: orangeIcon}).addTo(map).bindPopup("Etat du déploiement: en cours" +"<br>"+
             "<div>"+
             "<span class='lat'>lat: "+item[0]+"</span>"+ "<br>"+"<span class='lng'>lng: "+item[1]+"</span>"+ "<br>"+
@@ -274,6 +287,11 @@ function runLogic(){
         }
         if(marked_completed.length!=0){
         marked_completed.forEach(function(item){
+            //TODO chercher l'index du marker de latitude item[0] et de longitude item[1] puis le supprimer
+            let index=getMarkerIndex([item[0],item[1]],markers);
+            if(index!=-1){
+                map.removeLayer(markers[index]);
+            }
             L.marker([item[0], item[1]], {icon: greenIcon}).addTo(map).bindPopup("Etat du déploiement: terminé" +"<br>"+
             "<div>"+
             "<span class='lat'>lat: "+item[0]+"</span>"+ "<br>"+"<span class='lng'>lng: "+item[1]+"</span>"+ "<br>"+
@@ -290,19 +308,25 @@ function runLogic(){
 
 runLogic();
 
+
 document.addEventListener("click",function(){
     let elt=document.activeElement;
     if(elt.textContent.toLowerCase()=="terminé"){
         btn=elt;
          //catch the click event on the buttons
             btn.addEventListener("click",function(e){
-                     map.closePopup();
+                    map.closePopup();
                      //we get coodinates
                     let district_name=btn.parentElement.parentElement.children[4].textContent.split(":")[1].trim();
                     console.log(district_name);
                     let coordinates=getCoordinates(district_name,districts);
                     let current_lat=coordinates[0];
                     let current_lng=coordinates[1];
+                    //TODO chercher l'index du marker de latitude item[0] et de longitude item[1] puis le supprimer
+                    let index=getMarkerIndex([current_lat,current_lng],markers);
+                    if(index!=-1){
+                        map.removeLayer(markers[index]);
+                    }
                      //change the icon to green
                      let m=L.marker([current_lat, current_lng], {icon: greenIcon}).addTo(map).bindPopup("Etat du déploiement: terminé"+"<br> ");
                      if(!contain(marked_completed,[parseFloat(current_lat), parseFloat(current_lng)])){
@@ -323,12 +347,18 @@ document.addEventListener("click",function(){
                     //we get coodinates
                     let district_name=btn.parentElement.parentElement.children[4].textContent.split(":")[1].trim();
                     let coordinates=getCoordinates(district_name,districts);
+                    console.log(coordinates);
                     let current_lat=coordinates[0];
                     let current_lng=coordinates[1];
                     if(btn.classList.contains("inProgress")){
                         $.post("delete_marked_inProgress.php", {"latitude" : current_lat,"longitude":current_lng}, function(data){
                                     console.log(data);
                         })
+                        //TODO chercher l'index du marker de latitude item[0] et de longitude item[1] puis le supprimer
+                        let index=getMarkerIndex([current_lat,current_lng],markers);
+                        if(index!=-1){
+                            map.removeLayer(markers[index]);
+                        }
                         //change the marker to orange
                         L.marker([current_lat, current_lng], {icon: redIcon}).addTo(map).bindPopup("Etat du déploiement: pas encore commencé" +"<br>"+
                                 "<div>"+
@@ -338,7 +368,7 @@ document.addEventListener("click",function(){
                                 "<span style='color:#4DA5F6; text-decoration:underline;'>Détails</span>"+ "</div>");
 
                         //get index of the point
-                        let index=getIndex(marked_inProgress,[parseFloat(current_lat), parseFloat(current_lng)]);
+                        index=getIndex(marked_inProgress,[parseFloat(current_lat), parseFloat(current_lng)]);
                         //remove the point occurences to marked points
                         console.log("removing the point...");
                         marked_inProgress.splice(index,1);
@@ -348,6 +378,12 @@ document.addEventListener("click",function(){
                         $.post("delete_marked_completed.php", {"latitude" : current_lat,"longitude":current_lng}, function(data){
                                     console.log(data);
                         })
+
+                        //TODO chercher l'index du marker de latitude item[0] et de longitude item[1] puis le supprimer
+                        index=getMarkerIndex([current_lat,current_lng],markers);
+                        if(index!=-1){
+                            map.removeLayer(markers[index]);
+                        }
                         //change the marker to orange
                         L.marker([current_lat, current_lng], {icon: redIcon}).addTo(map).bindPopup("Etat du déploiement: en cours" +"<br>"+
                                 "<div>"+
@@ -357,10 +393,10 @@ document.addEventListener("click",function(){
                                 "<span style='color:#4DA5F6; text-decoration:underline;'>Détails</span>"+ "</div>");
 
                         //get index of the point
-                        let index=getIndex(marked_inProgress,[parseFloat(current_lat), parseFloat(current_lng)]);
+                        let index=getIndex(marked_completed,[parseFloat(current_lat), parseFloat(current_lng)]);
                         //remove the point occurences to marked points
                         console.log("removing the point...");
-                        marked_inProgress.splice(index,1);
+                        marked_completed.splice(index,1);
                         runLogic();
 
 
@@ -379,6 +415,11 @@ document.addEventListener("click",function(){
                      let current_lat=coordinates[0];
                      let current_lng=coordinates[1];
                      //change the icon to green
+                     //TODO chercher l'index du marker de latitude item[0] et de longitude item[1] puis le supprimer
+                     index=getMarkerIndex([current_lat,current_lng],markers);
+                     if(index!=-1){
+                         map.removeLayer(markers[index]);
+                     }
                      let m=L.marker([current_lat, current_lng], {icon: orangeIcon}).addTo(map).bindPopup("Etat du déploiement: en cours"+"<br> ");
                      if(!contain(marked_inProgress,[parseFloat(current_lat), parseFloat(current_lng)])){
                          console.log("adding the point...");
@@ -392,6 +433,15 @@ document.addEventListener("click",function(){
               });
     }
 });
+
+});
+
+}
+
+/*-----------------------------------------------------------------------------------------------------------------*/
+
+ajaxResults();
+
         </script> 
 
     </body>
