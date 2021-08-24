@@ -28,6 +28,7 @@
     }
     ?>
 
+
         <p class="text-center">Suivi du déploiement de l'application Teranga</p>
 
         <style>
