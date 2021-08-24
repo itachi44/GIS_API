@@ -34,9 +34,14 @@ if($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 	} else {
 
-		// handle the error
-		http_response_code(405);
-		echo json_encode(["message" => "La methode n'est pas autorisée"]) ;
+		$mark = [
+			"latitude" => 0,
+			"longitude" => 0,
+			"district"  => null
+		];
+		$tableauMarked['marked_locations'][] = $mark;
+
+		echo json_encode($tableauMarked);
 	}
 
 
