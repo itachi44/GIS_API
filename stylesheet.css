@@ -8,7 +8,7 @@ body{
 	color:#485563;
 	background-color:#fff;
 	justify-content:center;
-	background-image: url(bg.png);
+	/*background-image: url(bg.png);*/
 	background-size: cover;
 }
 .main{
@@ -78,14 +78,5 @@ body{
 }
 .submit:hover{
 	background-position:right;
-}
-.link{
-	margin:10px;
-	text-align:center;
-}
-.link a{
-	color :#aaa;
-	font-size:15px;
-	text-decoration:none;
 }
 

@@ -13,10 +13,7 @@
 
 <?php
 
-include_once 'Databases.php' ;
-$database = new Database() ;
-$db = $database->getConnexion() ;
-$district = new District($db);
+require('config.php');
 
 session_start();
 if (isset($_POST['username'])){

@@ -6,11 +6,13 @@
         <meta charset="UTF-8">
         <link rel="stylesheet" type="text/css" href="leaflet/leaflet.css" /> 
         <link rel="stylesheet" type="text/css" href="main.css" /> 
+        <link rel="stylesheet" type="text/css" href="stylesheet.css" /> 
         <link rel="shortcut icon" type="image" href="icon/favicon.jpeg" />
         <script type="text/javascript" src="leaflet/leaflet.js" ></script>
         <script type="text/javascript" src="jquery.min.js" ></script>
         <title>GIS Suivi du déploiement</title>
     </head>
+
     <body>
     <?php 
     if(isset($_GET["district"])){
@@ -26,7 +28,6 @@
         $init_lng=$result["longitude"];
     }
     ?>
-  
 
         <p class="text-center">Suivi du déploiement de l'application Teranga</p>
 
