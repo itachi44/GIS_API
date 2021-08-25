@@ -1,4 +1,3 @@
- 
 <!DOCTYPE html>
 
 <html>
@@ -282,7 +281,7 @@ function runLogic(){
             "<button  style='background-color:#F21D00;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn inProgress'>Annuler</button>"+
             "<button  style='background-color:#44bd32;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn'>terminé</button>"+ 
             "</div>"+
-            "</div>"); 
+            "</div>");
             markers.push(m);
         });
         }
@@ -337,6 +336,8 @@ document.addEventListener("click",function(){
             "<button  style='background-color:#F21D00;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn completed'>Annuler</button>"+
             "</div>"+
             "</div>");
+            m.bindTooltip(district_name, {permanent: true, className: "my-label", offset: [0, 0],direction:'bottom' });
+                        //markers.push(m);
                      if(!contain(marked_completed,[parseFloat(current_lat), parseFloat(current_lng)])){
                          console.log("adding the point...");
                             marked_completed.push([parseFloat(current_lat),parseFloat(current_lng)]);
@@ -362,17 +363,18 @@ document.addEventListener("click",function(){
                         $.post("delete_marked_inProgress.php", {"latitude" : current_lat,"longitude":current_lng}, function(data){
                                     console.log(data);
                         })
-                        //TODO chercher l'index du marker de latitude item[0] et de longitude item[1] puis le supprimer
-                        let index=getMarkerIndex([current_lat,current_lng],markers);
-                        if(index!=-1){
-                            map.removeLayer(markers[index]);
-                        }
+                        // //TODO chercher l'index du marker de latitude item[0] et de longitude item[1] puis le supprimer
+                        // let index=getMarkerIndex([current_lat,current_lng],markers);
+                        // if(index!=-1){
+                        //     map.removeLayer(markers[index]);
+                        // }
                         //change the marker to orange
                         let m=L.marker([current_lat, current_lng], {icon: redIcon}).addTo(map).bindPopup(
                             "Etat du déploiement: pas encore commencé"+"<br>"+"<span>District: "+district_name+"</span>" +
                             "<br><br>"+
                             "<div style='text-align:center;'><button style='background-color:#00a8ff;color:#fff; border-radius:5px; ' type='button' class='btn commencer'>Commencer</button></div>");
-                            markers.push(m);
+                            m.bindTooltip(district_name, {permanent: true, className: "my-label", offset: [0, 0],direction:'bottom' });
+                            //markers.push(m);
 
                         //get index of the point
                         let indice=getIndex(marked_inProgress,[parseFloat(current_lat), parseFloat(current_lng)]);
@@ -386,22 +388,23 @@ document.addEventListener("click",function(){
                                     console.log(data);
                         })
 
-                        //TODO chercher l'index du marker de latitude item[0] et de longitude item[1] puis le supprimer
-                        let index=getMarkerIndex([current_lat,current_lng],markers);
-                        if(index!=-1){
-                            map.removeLayer(markers[index]);
-                        }
+                        // //TODO chercher l'index du marker de latitude item[0] et de longitude item[1] puis le supprimer
+                        // let index=getMarkerIndex([current_lat,current_lng],markers);
+                        // if(index!=-1){
+                        //     map.removeLayer(markers[index]);
+                        // }
                         //change the marker to orange
                         let m=L.marker([current_lat, current_lng], {icon: orangeIcon}).addTo(map).bindPopup("Etat du déploiement: en cours" +"<br>"+
-            "<div>"+
-            "<span class='lat'>lat: "+current_lat+"</span>"+ "<br>"+"<span class='lng'>lng: "+current_lng+"</span>"+ "<br>"+
-            "<span> District: "+district_name+"</span>"+"<br>"+
-            "<div style='text-align:center; display:flex; flex-direction:row;'>"+
-            "<button  style='background-color:#F21D00;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn inProgress'>Annuler</button>"+
-            "<button  style='background-color:#44bd32;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn'>terminé</button>"+ 
-            "</div>"+
-            "</div>");
-                        markers.push(m);
+                        "<div>"+
+                        "<span class='lat'>lat: "+current_lat+"</span>"+ "<br>"+"<span class='lng'>lng: "+current_lng+"</span>"+ "<br>"+
+                        "<span> District: "+district_name+"</span>"+"<br>"+
+                        "<div style='text-align:center; display:flex; flex-direction:row;'>"+
+                        "<button  style='background-color:#F21D00;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn inProgress'>Annuler</button>"+
+                        "<button  style='background-color:#44bd32;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn'>terminé</button>"+ 
+                        "</div>"+
+                        "</div>");
+            m.bindTooltip(district_name, {permanent: true, className: "my-label", offset: [0, 0],direction:'bottom' });
+            //markers.push(m);
 
                         //get index of the point
                         let indice=getIndex(marked_completed,[parseFloat(current_lat), parseFloat(current_lng)]);
@@ -422,19 +425,17 @@ document.addEventListener("click",function(){
                      map.closePopup();
                      //we get coodinates
                      let district_name=btn.parentElement.parentElement.children[1].textContent.split(":")[1].trim()
-                     console.log(district_name);
                      let coordinates=getCoordinates(district_name,districts);
                      let current_lat=coordinates[0];
                      let current_lng=coordinates[1];
                      //change the icon to green
                      //TODO chercher l'index du marker de latitude item[0] et de longitude item[1] puis le supprimer
-                     let index=getMarkerIndex([current_lat,current_lng],markers);
-                     console.log(index);
-                     markers.splice(index,1);
-                     if(index!=-1){
-                         map.removeLayer(markers[index]);
-                     }
-                     console.log(district_name);
+                    //  let index=getMarkerIndex([current_lat,current_lng],markers);
+                    //  console.log(index);
+                    //  markers.splice(index,1);
+                    //  if(index!=-1){
+                    //      map.removeLayer(markers[index]);
+                    //  }
                      let m=L.marker([current_lat, current_lng], {icon: orangeIcon}).addTo(map).bindPopup("Etat du déploiement: en cours" +"<br>"+
             "<div>"+
             "<span class='lat'>lat: "+current_lat+"</span>"+ "<br>"+"<span class='lng'>lng: "+current_lng+"</span>"+ "<br>"+
@@ -444,7 +445,8 @@ document.addEventListener("click",function(){
             "<button  style='background-color:#44bd32;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn'>terminé</button>"+ 
             "</div>"+
             "</div>");
-                    markers.push(m);
+            m.bindTooltip(district_name, {permanent: true, className: "my-label", offset: [0, 0],direction:'bottom' });
+                    //markers.push(m);
                         
                      if(!contain(marked_inProgress,[parseFloat(current_lat), parseFloat(current_lng)])){
                          console.log("adding the point...");
@@ -462,13 +464,8 @@ document.addEventListener("click",function(){
 });
 
 }
-
-/*-----------------------------------------------------------------------------------------------------------------*/
-
 ajaxResults();
+</script>
 
-        </script> 
-
-    </body>
- </html>
- </html>
+</body>
+</html>
