@@ -3,6 +3,8 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
         <link rel="stylesheet" type="text/css" href="leaflet/leaflet.css" /> 
         <link rel="stylesheet" type="text/css" href="main.css" /> 
         <link rel="shortcut icon" type="image" href="icon/favicon.jpeg" />
@@ -48,7 +50,7 @@
                 top: 0;
                 bottom: 0;
                 width: 100%;
-                height: 90%;
+                height: 100%;
               }
               .my-label{
                   transform:scale(0.5);
@@ -56,7 +58,7 @@
               }
         </style>
 
-        <div class="container" id="mapid"></div>
+        <div class="container-fluid" id="mapid"></div>
 
         <script >
             //red_marker
@@ -185,9 +187,9 @@ async function getDistrictsData() {
                 districts.forEach(function(point){
                     let marker=L.marker([point[0], point[1]], {icon: redIcon});
                     marker.bindTooltip(point[2], {permanent: true, className: "my-label", offset: [0, 0],direction:'bottom' });
-                    marker.addTo(map).bindPopup("Etat du déploiement: pas encore commencé"+"<br>"+"<span>District: "+point[2]+"</span>" +
-                    "<br><br>"+
-                    "<div style='text-align:center;'><button style='background-color:#00a8ff;color:#fff; border-radius:5px; ' type='button' class='btn commencer'>Commencer</button></div>");
+                    marker.addTo(map).bindPopup("<div style='line-height:25px; font-size:1.2em;'>"+"<span>Etat du déploiement: </span> <span style='font-weight:bold; color:#EA2027;'>pas encore commencé</span>"+"<br>"+"<span accesskey='district'>District: "+point[2]+"</span>" +
+                    "<br>"+
+                    "<div style='text-align:center; margin-top:5%;'><button style='background-color:#00a8ff;color:#fff; border-radius:5px; ' type='button' class='btn commencer'>Commencer</button></div>"+"</div>");
                     markers.push(marker); 
          
                 });
@@ -273,15 +275,18 @@ function runLogic(){
             // if(index!=-1){
             //     map.removeLayer(markers[index]);
             // }
-            let m=L.marker([item[0], item[1]], {icon: orangeIcon}).addTo(map).bindPopup("Etat du déploiement: en cours" +"<br>"+
-            "<div>"+
-            "<span class='lat'>lat: "+item[0]+"</span>"+ "<br>"+"<span class='lng'>lng: "+item[1]+"</span>"+ "<br>"+
+            let m=L.marker([item[0], item[1]], {icon: orangeIcon}).addTo(map).bindPopup("<span style='font-size:1.3em;'>Etat du déploiement: </span>"+"<span style='font-size:1.3em; font-weight:bold; color:#F79F1F;'>en cours</span>" +"<br><br>"+
+            "<div style='line-height:25px; font-size:1.2em;'>"+
+            "<span class='lat'>latitude: "+item[0]+"</span>"+ "<br>"+"<span class='lng'>longitude: "+item[1]+"</span>"+ "<br>"+
             "<span> District: "+item[2]+"</span>"+"<br>"+
-            "<div style='text-align:center; display:flex; flex-direction:row;'>"+
+            "<a href='#' style=''>Détails <img style='transform:scale(0.9);' src='./icon/info.png'></a>"+ "<br>"+
+            "<div style='text-align:center; margin-top:5%; display:flex; flex-direction:row;'>"+
             "<button  style='background-color:#F21D00;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn inProgress'>Annuler</button>"+
             "<button  style='background-color:#44bd32;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn'>terminé</button>"+ 
             "</div>"+
-            "</div>");
+            "</div>", {
+            minWidth: 200 // Largeur minimale 
+                });
             markers.push(m);
         });
         }
@@ -292,18 +297,21 @@ function runLogic(){
             // if(index!=-1){
             //     map.removeLayer(markers[index]);
             // }
-            let m=L.marker([item[0], item[1]], {icon: greenIcon}).addTo(map).bindPopup("Etat du déploiement: terminé" +"<br>"+
-            "<div>"+
-            "<span class='lat'>lat: "+item[0]+"</span>"+ "<br>"+"<span class='lng'>lng: "+item[1]+"</span>"+ "<br>"+
+            let m=L.marker([item[0], item[1]], {icon: greenIcon}).addTo(map).bindPopup("<span style='font-size:1.3em;'>Etat du déploiement: </span>"+ "<span style='font-size:1.3em; font-weight:bold; color:#44bd32;'>terminé </span>" +"<br><br>"+
+            "<div style='line-height:25px; font-size:1.2em;'>"+
+            "<span class='lat'>latitude: "+item[0]+"</span>"+ "<br>"+"<span class='lng'>longitude: "+item[1]+"</span>"+ "<br>"+
             "<span> District: "+item[2]+"</span>"+"<br>"+
-            "<div style='text-align:center; display:flex; justify-content:center; flex-direction:row;'>"+
+            "<a href='#' style=''>Détails <img style='transform:scale(0.9);' src='./icon/info.png'></a>"+ "<br>"+
+            "<div style='text-align:center; display:flex; margin-top:5%; justify-content:center; flex-direction:row;'>"+
             "<button  style='background-color:#F21D00;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn completed'>Annuler</button>"+
             "</div>"+
-            "</div>"); 
+            "</div>",{
+            minWidth: 200 // Largeur minimale 
+                }); 
             markers.push(m);
         });
         }
- }, 1000);
+ }, 500);
 }
 
 runLogic();
@@ -328,14 +336,17 @@ document.addEventListener("click",function(){
                         map.removeLayer(markers[index]);
                     }
                      //change the icon to green
-                     let m=L.marker([current_lat, current_lng], {icon: greenIcon}).addTo(map).bindPopup("Etat du déploiement: terminé" +"<br>"+
-            "<div>"+
-            "<span class='lat'>lat: "+current_lat+"</span>"+ "<br>"+"<span class='lng'>lng: "+current_lng+"</span>"+ "<br>"+
+                     let m=L.marker([current_lat, current_lng], {icon: greenIcon}).addTo(map).bindPopup("<span style='font-size:1.3em;'>Etat du déploiement: </span>"+ "<span style='font-size:1.3em; font-weight:bold; color:#44bd32;'>terminé </span>" +"<br><br>"+
+            "<div style='line-height:25px; font-size:1.2em;'>"+
+            "<span class='lat'>latitude: "+current_lat+"</span>"+ "<br>"+"<span class='lng'>longitude: "+current_lng+"</span>"+ "<br>"+
             "<span> District: "+district_name+"</span>"+"<br>"+
-            "<div style='text-align:center; display:flex; justify-content:center; flex-direction:row;'>"+
+            "<a href='#' style=''>Détails <img style='transform:scale(0.9);' src='./icon/info.png'></a>"+ "<br>"+
+            "<div style='text-align:center; display:flex; margin-top:5%; justify-content:center; flex-direction:row;'>"+
             "<button  style='background-color:#F21D00;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn completed'>Annuler</button>"+
             "</div>"+
-            "</div>");
+            "</div>",{
+            minWidth: 200 // Largeur minimale 
+                });
             m.bindTooltip(district_name, {permanent: true, className: "my-label", offset: [0, 0],direction:'bottom' });
                         //markers.push(m);
                      if(!contain(marked_completed,[parseFloat(current_lat), parseFloat(current_lng)])){
@@ -370,9 +381,9 @@ document.addEventListener("click",function(){
                         // }
                         //change the marker to orange
                         let m=L.marker([current_lat, current_lng], {icon: redIcon}).addTo(map).bindPopup(
-                            "Etat du déploiement: pas encore commencé"+"<br>"+"<span>District: "+district_name+"</span>" +
-                            "<br><br>"+
-                            "<div style='text-align:center;'><button style='background-color:#00a8ff;color:#fff; border-radius:5px; ' type='button' class='btn commencer'>Commencer</button></div>");
+                            "<div style='line-height:25px; font-size:1.2em;'>"+"<span>Etat du déploiement: </span> <span style='font-weight:bold; color:#EA2027;'>pas encore commencé</span>"+"<br>"+"<span accesskey='district'>District: "+district_name+"</span>" +
+                    "<br>"+
+                    "<div style='text-align:center; margin-top:5%;'><button style='background-color:#00a8ff;color:#fff; border-radius:5px; ' type='button' class='btn commencer'>Commencer</button></div>"+"</div>");
                             m.bindTooltip(district_name, {permanent: true, className: "my-label", offset: [0, 0],direction:'bottom' });
                             //markers.push(m);
 
@@ -394,15 +405,18 @@ document.addEventListener("click",function(){
                         //     map.removeLayer(markers[index]);
                         // }
                         //change the marker to orange
-                        let m=L.marker([current_lat, current_lng], {icon: orangeIcon}).addTo(map).bindPopup("Etat du déploiement: en cours" +"<br>"+
-                        "<div>"+
-                        "<span class='lat'>lat: "+current_lat+"</span>"+ "<br>"+"<span class='lng'>lng: "+current_lng+"</span>"+ "<br>"+
-                        "<span> District: "+district_name+"</span>"+"<br>"+
-                        "<div style='text-align:center; display:flex; flex-direction:row;'>"+
-                        "<button  style='background-color:#F21D00;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn inProgress'>Annuler</button>"+
-                        "<button  style='background-color:#44bd32;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn'>terminé</button>"+ 
-                        "</div>"+
-                        "</div>");
+                        let m=L.marker([current_lat, current_lng], {icon: orangeIcon}).addTo(map).bindPopup("<span style='font-size:1.3em;'>Etat du déploiement: </span>"+"<span style='font-size:1.3em; font-weight:bold; color:#F79F1F;'>en cours</span>" +"<br><br>"+
+            "<div style='line-height:25px; font-size:1.2em;'>"+
+            "<span class='lat'>latitude: "+current_lat+"</span>"+ "<br>"+"<span class='lng'>longitude: "+current_lng+"</span>"+ "<br>"+
+            "<span> District: "+district_name+"</span>"+"<br>"+
+            "<a href='#' style=''>Détails <img style='transform:scale(0.9);' src='./icon/info.png'></a>"+ "<br>"+
+            "<div style='text-align:center; margin-top:5%; display:flex; flex-direction:row;'>"+
+            "<button  style='background-color:#F21D00;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn inProgress'>Annuler</button>"+
+            "<button  style='background-color:#44bd32;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn'>terminé</button>"+ 
+            "</div>"+
+            "</div>",{
+            minWidth: 200 // Largeur minimale 
+                });
             m.bindTooltip(district_name, {permanent: true, className: "my-label", offset: [0, 0],direction:'bottom' });
             //markers.push(m);
 
@@ -424,7 +438,7 @@ document.addEventListener("click",function(){
             btn.addEventListener("click",function(e){
                      map.closePopup();
                      //we get coodinates
-                     let district_name=btn.parentElement.parentElement.children[1].textContent.split(":")[1].trim()
+                     let district_name=btn.parentElement.parentElement.children[3].textContent.split(":")[1].trim()
                      let coordinates=getCoordinates(district_name,districts);
                      let current_lat=coordinates[0];
                      let current_lng=coordinates[1];
@@ -436,15 +450,18 @@ document.addEventListener("click",function(){
                     //  if(index!=-1){
                     //      map.removeLayer(markers[index]);
                     //  }
-                     let m=L.marker([current_lat, current_lng], {icon: orangeIcon}).addTo(map).bindPopup("Etat du déploiement: en cours" +"<br>"+
-            "<div>"+
-            "<span class='lat'>lat: "+current_lat+"</span>"+ "<br>"+"<span class='lng'>lng: "+current_lng+"</span>"+ "<br>"+
+                     let m=L.marker([current_lat, current_lng], {icon: orangeIcon}).addTo(map).bindPopup("<span style='font-size:1.3em;'>Etat du déploiement: </span>"+"<span style='font-size:1.3em; font-weight:bold; color:#F79F1F;'>en cours</span>" +"<br><br>"+
+            "<div style='line-height:25px; font-size:1.2em;'>"+
+            "<span class='lat'>latitude: "+current_lat+"</span>"+ "<br>"+"<span class='lng'>longitude: "+current_lng+"</span>"+ "<br>"+
             "<span> District: "+district_name+"</span>"+"<br>"+
-            "<div style='text-align:center; display:flex; flex-direction:row;'>"+
+            "<a href='#' style=''>Détails <img style='transform:scale(0.9);' src='./icon/info.png'></a>"+ "<br>"+
+            "<div style='text-align:center; margin-top:5%; display:flex; flex-direction:row;'>"+
             "<button  style='background-color:#F21D00;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn inProgress'>Annuler</button>"+
             "<button  style='background-color:#44bd32;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn'>terminé</button>"+ 
             "</div>"+
-            "</div>");
+            "</div>",{
+            minWidth: 200 // Largeur minimale 
+                });
             m.bindTooltip(district_name, {permanent: true, className: "my-label", offset: [0, 0],direction:'bottom' });
                     //markers.push(m);
                         
