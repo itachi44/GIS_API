@@ -28,37 +28,28 @@
     }
     ?>
   
-
-        <p class="text-center">Suivi du déploiement de l'application Teranga</p>
-
-        <style>
-            body{
-                margin: 0;
-                padding: 0;
-            }
-            .text-center{
-                right: 35%;
-                position:absolute;
-                top: 0;
-                margin: 0;
-                color: rgba(0,88,156,255);
-                font-size: 1.4em;
-                text-decoration: underline;
-            }
-            #mapid{
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                width: 100%;
-                height: 100%;
-              }
-              .my-label{
-                  transform:scale(0.5);
-                  font-size:0.7em;
-              }
-        </style>
-
-        <div class="container-fluid" id="mapid"></div>
+<div style="min-height:800px; margin:0; padding:0;" class="container-fluid">
+<nav class="navbar navbar-expand-lg mb-0 navbar-light bg-light">
+  <div  class="container-fluid">
+    <a  class="navbar-brand" href="#"><img width="100" height="50" alt="" class="d-inline-block align-middle mr-2"  src="./icon/favicon.jpeg"></a>
+    <button  class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div  class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul style="width:80%;" class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li  class="nav-item">
+        <p style="color: rgba(0,88,156,255); font-size: 1.4em;" class="text-center mt-1">Suivi du déploiement de l'application Teranga</p>
+        </li>
+      </ul>
+      <form id="search_district" style="width:40%;" class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Rechercher un district" aria-label="Search">
+        <button  class="btn btn-outline-success" type="submit">rechercher</button>
+      </form>
+    </div>
+  </div>
+</nav>
+        <div style="width:100%; min-height: 700px; margin:0;" class="container-fluid" id="mapid"></div>
+ </div>
 
         <script >
             //red_marker
@@ -483,6 +474,6 @@ document.addEventListener("click",function(){
 }
 ajaxResults();
 </script>
-
+<script src="main.js"></script>
 </body>
 </html>
