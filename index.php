@@ -20,27 +20,59 @@
         echo $district;
         $database = new Database() ;
         $conn = $database->getConnexion(); 
-        $stmt = $conn->prepare("SELECT longitude,latitude FROM centroids79districts WHERE district_sanitaire LIKE :district");
-        $stmt->execute(['district'=>'%'.$district.'%']);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        $init_lat=$result["latitude"];
-        $init_lng=$result["longitude"];
+        // $stmt = $conn->prepare("SELECT longitude,latitude FROM centroids79districts WHERE district_sanitaire LIKE :district");
+        // $stmt->execute(['district'=>'%'.$district.'%']);
+        // $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        // $init_lat=$result["latitude"];
+        // $init_lng=$result["longitude"];
     }
     ?>
   
 <div style="min-height:800px; margin:0; padding:0;" class="container-fluid">
+<!--Modal-START-->
+
+
+<!-- Modal -->
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Information district : </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Do something</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Modal-END-->
 <nav class="navbar navbar-expand-lg mb-0 navbar-light bg-light">
   <div  class="container-fluid">
-    <a  class="navbar-brand" href="#"><img width="100" height="50" alt="" class="d-inline-block align-middle mr-2"  src="./icon/favicon.jpeg"></a>
+    <a  class="navbar-brand" href="#"><img width="100" height="50" alt="" class="d-inline-block align-middle mr-2"  src="./icon/logo_ipd6.png" style='border-radius:10%;'></a>
     <button  class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div  class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul style="width:80%;" class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul style="width:75%;" class="navbar-nav me-auto mb-2 mb-lg-0">
         <li  class="nav-item">
         <p style="color: rgba(0,88,156,255); font-size: 1.4em;" class="text-center mt-1">Suivi du déploiement de l'application Teranga</p>
         </li>
       </ul>
+      <div style="margin-right: 3%;" class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    type de carte
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li><a class="dropdown-item" href="#">vue satellite</a></li>
+    <li><a class="dropdown-item" href="#">vue normale</a></li>
+    <li><a class="dropdown-item" href="#">vue terrain</a></li>
+  </ul>
+</div>
       <form id="search_district" style="width:40%;" class="d-flex">
         <input class="form-control me-2" type="search" placeholder="Rechercher un district" aria-label="Search">
         <button  class="btn btn-outline-success" type="submit">rechercher</button>
@@ -147,6 +179,7 @@
             let mylng = '-17.17218771';
             let myzoom = '12';
 
+            //appel ajax GET vers search_district pour récupérer la latitude et la longitude 
 
             let map = L.map('mapid').setView([mylat, mylng], myzoom);
             L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar'}).addTo(map); 
@@ -270,7 +303,7 @@ function runLogic(){
             "<div style='line-height:25px; font-size:1.2em;'>"+
             "<span class='lat'>latitude: "+item[0]+"</span>"+ "<br>"+"<span class='lng'>longitude: "+item[1]+"</span>"+ "<br>"+
             "<span> District: "+item[2]+"</span>"+"<br>"+
-            "<a href='#' style=''>Détails <img style='transform:scale(0.9);' src='./icon/info.png'></a>"+ "<br>"+
+            "<a href='#' class='details' data-bs-toggle='modal' data-bs-target='#infoModal' style=''>Détails <img style='transform:scale(0.9);' src='./icon/info.png'></a>"+ "<br>"+
             "<div style='text-align:center; margin-top:5%; display:flex; flex-direction:row;'>"+
             "<button  style='background-color:#F21D00;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn inProgress'>Annuler</button>"+
             "<button  style='background-color:#44bd32;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn'>terminé</button>"+ 
@@ -292,7 +325,7 @@ function runLogic(){
             "<div style='line-height:25px; font-size:1.2em;'>"+
             "<span class='lat'>latitude: "+item[0]+"</span>"+ "<br>"+"<span class='lng'>longitude: "+item[1]+"</span>"+ "<br>"+
             "<span> District: "+item[2]+"</span>"+"<br>"+
-            "<a href='#' style=''>Détails <img style='transform:scale(0.9);' src='./icon/info.png'></a>"+ "<br>"+
+            "<a href='#' class='details' data-bs-toggle='modal' data-bs-target='#infoModal' style=''>Détails <img style='transform:scale(0.9);' src='./icon/info.png'></a>"+ "<br>"+
             "<div style='text-align:center; display:flex; margin-top:5%; justify-content:center; flex-direction:row;'>"+
             "<button  style='background-color:#F21D00;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn completed'>Annuler</button>"+
             "</div>"+
@@ -331,7 +364,7 @@ document.addEventListener("click",function(){
             "<div style='line-height:25px; font-size:1.2em;'>"+
             "<span class='lat'>latitude: "+current_lat+"</span>"+ "<br>"+"<span class='lng'>longitude: "+current_lng+"</span>"+ "<br>"+
             "<span> District: "+district_name+"</span>"+"<br>"+
-            "<a href='#' style=''>Détails <img style='transform:scale(0.9);' src='./icon/info.png'></a>"+ "<br>"+
+            "<a href='#' class='details' data-bs-toggle='modal' data-bs-target='#infoModal' style=''>Détails <img style='transform:scale(0.9);' src='./icon/info.png'></a>"+ "<br>"+
             "<div style='text-align:center; display:flex; margin-top:5%; justify-content:center; flex-direction:row;'>"+
             "<button  style='background-color:#F21D00;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn completed'>Annuler</button>"+
             "</div>"+
@@ -400,7 +433,7 @@ document.addEventListener("click",function(){
             "<div style='line-height:25px; font-size:1.2em;'>"+
             "<span class='lat'>latitude: "+current_lat+"</span>"+ "<br>"+"<span class='lng'>longitude: "+current_lng+"</span>"+ "<br>"+
             "<span> District: "+district_name+"</span>"+"<br>"+
-            "<a href='#' style=''>Détails <img style='transform:scale(0.9);' src='./icon/info.png'></a>"+ "<br>"+
+            "<a href='#' class='details' data-bs-toggle='modal' data-bs-target='#infoModal' style=''>Détails <img style='transform:scale(0.9);' src='./icon/info.png'></a>"+ "<br>"+
             "<div style='text-align:center; margin-top:5%; display:flex; flex-direction:row;'>"+
             "<button  style='background-color:#F21D00;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn inProgress'>Annuler</button>"+
             "<button  style='background-color:#44bd32;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn'>terminé</button>"+ 
@@ -445,7 +478,7 @@ document.addEventListener("click",function(){
             "<div style='line-height:25px; font-size:1.2em;'>"+
             "<span class='lat'>latitude: "+current_lat+"</span>"+ "<br>"+"<span class='lng'>longitude: "+current_lng+"</span>"+ "<br>"+
             "<span> District: "+district_name+"</span>"+"<br>"+
-            "<a href='#' style=''>Détails <img style='transform:scale(0.9);' src='./icon/info.png'></a>"+ "<br>"+
+            "<a href='#' class='details' data-bs-toggle='modal' data-bs-target='#infoModal' style=''>Détails <img style='transform:scale(0.9);' src='./icon/info.png'></a>"+ "<br>"+
             "<div style='text-align:center; margin-top:5%; display:flex; flex-direction:row;'>"+
             "<button  style='background-color:#F21D00;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn inProgress'>Annuler</button>"+
             "<button  style='background-color:#44bd32;color:#fff; border-radius:5px; margin-right:20%; display:inline;' type='button' class='btn'>terminé</button>"+ 
