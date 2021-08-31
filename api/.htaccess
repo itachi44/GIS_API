@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On 
+# le chemin demandé ne correspond pas a un fichier
+RewriteCond %{REQUEST_FILENAME} !-f
+# le chemin demandé ne correspond pas a un repertoire
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule api/(.*)$ api/api_controller.php?request=$1 [QSA,NC,L]
+</IfModule>
+
