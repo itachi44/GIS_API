@@ -46,3 +46,11 @@ button:hover {
     background-color: #B0F2FF; /* Green */
     color: black;
   }
+
+.live::before {
+    content: ".";
+    color: red;
+    float: left;
+    transform: scale(1.8);
+
+  }

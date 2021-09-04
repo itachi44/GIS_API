@@ -20,11 +20,6 @@
         echo $district;
         $database = new Database() ;
         $conn = $database->getConnexion(); 
-        // $stmt = $conn->prepare("SELECT longitude,latitude FROM centroids79districts WHERE district_sanitaire LIKE :district");
-        // $stmt->execute(['district'=>'%'.$district.'%']);
-        // $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        // $init_lat=$result["latitude"];
-        // $init_lng=$result["longitude"];
     }
     ?>
   
@@ -58,11 +53,12 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div  class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul style="width:75%;" class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul style="width:70%;" class="navbar-nav me-auto mb-2 mb-lg-0">
         <li  class="nav-item">
         <p style="color: rgba(0,88,156,255); font-size: 1.4em;" class="text-center mt-1">Suivi du déploiement de l'application Teranga</p>
         </li>
       </ul>
+      <button style="margin-right: 5%; min-width:9%; color:#fff;" type="button" class="btn btn-info live">en direct </button>
       <div style="margin-right: 3%;" class="dropdown">
   <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
     type de carte
