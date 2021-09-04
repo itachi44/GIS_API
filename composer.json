@@ -1,0 +1,15 @@
+{
+    "name": "gis/gis_project",
+    "description": "GIS project",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Bamba Diop",
+            "email": "dcheikhahmadou@ept.sn"
+        }
+    ],
+    "require": {
+        "zircote/swagger-php": "^3.0",
+        "firebase/php-jwt": "^5.4"
+    }
+}
