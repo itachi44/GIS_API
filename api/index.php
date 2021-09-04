@@ -1,5 +1,19 @@
 <?php
-$request_method = $_SERVER["REQUEST_METHOD"];
+header("Access-Control-Allow-Origin: * ");
+header("Access-Control-Allow-Headers: * ");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT");
+header("Access-Control-Max-Age: 86400");
+if($request_method == "OPTIONS"){
+        header("HTTP/1.1 204 No Content");
+         header("Connection: keep-alive");
+         header("Access-Control-Allow-Origin: * ");
+         header("Access-Control-Allow-Headers: * ");
+         header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT");
+         header("Access-Control-Max-Age: 86400");
+         die("Response");
+      }
+
+
 $requested_file=explode("/",$_SERVER['REQUEST_URI']);
 if($requested_file[1]=="api"){
         if(!empty($requested_file[2])){
@@ -9,10 +23,14 @@ if($requested_file[1]=="api"){
                                 //il y'a un slash à la fin de l'URI
                                 header('Location: ../'.$page);
                                 exit();
-                        }else{
+                        }else if(!array_key_exists(3, $requested_file)){
                                 //il n'y a pas de slash à la fin
                                 header('Location: '.$page);
                                 exit();
+                        }else{
+                                http_response_code(404);
+                                echo "page not found";
+                                exit(1);
                         }
                         
                 }
@@ -34,6 +52,7 @@ if($requested_file[1]=="api"){
                         exit();
                         }
                 }else{
+                        print_r($_SERVER["REQUEST_URI"]);
                         http_response_code(404);
                         echo "page not found";
                         exit(1);

@@ -100,7 +100,7 @@
                 }
             }
         },
-        "/comment/{id_comment}": {
+        "/comment?id_comment={id_comment}": {
             "get": {
                 "tags": [
                     "Comment"
