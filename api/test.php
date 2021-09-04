@@ -1,12 +1,30 @@
 <?php
 
-echo 'test ok';
+echo "test ok\n";
+
 $request_method = $_SERVER["REQUEST_METHOD"];
 
 
+switch ($request_method) {
+    case 'GET':
+        # code...
+        break;
 
-//TODO vérifier si les paramètres dans l'url arrivent normalement
+    case 'POST':
 
-if (isset($_GET["request"])){
-    echo $_GET["request"];
+        break;
+    
+    case 'PUT':
+
+        break;
+
+    case 'DELETE':
+
+        break;
+    
+    default:
+      header("HTTP/1.0 405 Méthode non autorisée");
+      break;
+        break;
 }
+

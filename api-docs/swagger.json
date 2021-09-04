@@ -1,0 +1,385 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "GIS API",
+        "version": "0.1"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8081/api/",
+            "description": "GIS API"
+        },
+        {
+            "url": "http://gis.api-docs.com/api/",
+            "description": "GIS API"
+        }
+    ],
+    "securityDefinitions": {
+      "JWT": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+    "paths": {
+        "/comment": {
+            "get": {
+                "tags": [
+                    "Comment"
+                  ],
+                  "security": [
+                    {
+                          "JWT": []
+                     }
+                        ],
+                "summary": "Récupérer tous les commentaires",
+                "responses": {
+                    "200": {
+                        "description": "tous les commentaires",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Comment"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "405": {
+                        "description": "Permission non accordée"
+                      },
+                    "500":{
+                        "description": "erreur serveur"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Comment"
+                  ],
+              "security": [
+               {
+                     "JWT": []
+                }
+                   ],
+                "summary": "Création d'un nouveau commentaire",
+                "requestBody":{
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Comment"
+                                }
+                            }
+                        }
+                      }
+                },
+                "responses": {
+                    "201": {
+                        "description": "le commentaire qui a été créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Comment"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "entrées invalides"
+                    },
+                    "405": {
+                        "description": "Permission non accordée"
+                      }
+                }
+            }
+        },
+        "/comment/{id_comment}": {
+            "get": {
+                "tags": [
+                    "Comment"
+                  ],
+                  "security": [
+                    {
+                          "JWT": []
+                     }
+                        ],
+                "summary": "Récupérer un commentaire spécifique",
+                "parameters": [
+                    {
+                        "name": "id_comment",
+                        "in": "path",
+                        "description": "id de la ressource comment",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "le commentaire récupéré",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Comment"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "Invalid Id_comment"
+                    },
+                    "404":{
+                        "description": "commentaire non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                  "Comment"
+                ],
+                "security": [
+                    {
+                          "JWT": []
+                     }
+                        ],
+                "summary": "Mettre à jour un commentaire existant",
+                "parameters": [
+                  {
+                      "name": "id_comment",
+                      "in": "path",
+                      "description": "id de la ressource commentaire",
+                      "required": true,
+                      "schema": {
+                          "type": "integer"
+                      }
+                  }
+              ],
+              "requestBody":{
+                  "content": {
+                      "application/json": {
+                          "schema": {
+                              "type": "array",
+                              "items": {
+                                  "$ref": "#/components/schemas/Comment"
+                              }
+                          }
+                      }
+                    }
+              },
+                "responses": {
+                  "200": {
+                      "description": "Commentaire modifié avec succés",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "type": "array",
+                                  "items": {
+                                      "$ref": "#/components/schemas/Comment"
+                                  }
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "Invalid ID_comment"
+                    },
+                  "404": {
+                    "description": "Commentaire non trouvé"
+                  },
+                  "405": {
+                    "description": "Permission non accordée"
+                  }
+                }
+                  
+              },
+            "delete": {
+                "tags": [
+                    "Comment"
+                  ],
+                  "security": [
+                    {
+                          "JWT": []
+                     }
+                        ],
+                "summary": "Suppression d'un commentaire",
+                "parameters": [
+                    {
+                        "name": "id_comment",
+                        "in": "path",
+                        "description": "id du commentaire",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "le commentaire a été supprimé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Comment"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400":{
+                        "description": "Invalid id_comment"
+                    },
+                    "404":{
+                        "description": "commentaire non trouvé"
+                    },
+                    "405": {
+                        "description": "Permission non accordée"
+                      }
+                }
+            }
+        },
+"/login":{
+  "post": {
+    "description": "Retourne le jeton de l'utilisateur autorisé",
+    "tags": [
+      "User"
+    ],
+    "operationId": "Login",
+    "consumes": [
+      "application/json"
+    ],
+    "summary": "authentifie un utilisateur et renvoie un token",
+    "requestBody":{
+        "content": {
+            "application/json": {
+                "schema": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/components/schemas/LoginInfo"
+                    }
+                }
+            }
+          }
+    },
+    "responses": {
+      "200": {
+        "description": "Connexion réussie",
+        "schema": {
+          "$ref": "#/definitions/LoginSuccess"
+        }
+      },
+    "400":{
+        "description": "entrées invalides"
+    },
+      "500": {
+        "schema": {
+          "type": "string"
+        },
+        "description": "erreur serveur"
+      }
+    }
+  }
+
+}
+
+    },
+    "definitions": {
+      "LoginSuccess": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "token": {
+            "type": "string"
+          }
+        }
+      }
+
+    },
+
+    "components":{
+        "securitySchemes": {
+            "JWT": {
+                "type": "apiKey",
+                "name": "Authorization",
+                "in": "header",
+                "JWTFormat": "JWT",
+                "scheme": "JWT"
+            }
+        },
+        "schemas":{
+          "Comment":{
+            "type": "object",
+            "properties":{
+              "id_comment":{
+                "type": "integer"
+              },
+              "comment_content":{
+                "type": "string"
+              },
+              "id_user":{
+                "type": "integer"
+              }
+            }
+          },
+
+          "LoginInfo": {
+            "type": "object",
+            "required": [
+              "email",
+              "password"
+            ],
+            "properties": {
+              "email": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              }
+            }
+          },
+
+          "User":{
+            "type": "object",
+            "properties":{
+              "id_user":{
+                "type": "integer"
+              },
+              "first_name":{
+                "type": "string"
+              },
+              "last_name":{
+                "type": "string"
+              },
+              "email":{
+                "type": "string",
+                "format": "email"
+              },
+              "password":{
+                "type": "string",
+                "format": "password"
+              },
+              "telephone":{
+                "type": "integer"
+              },
+              "id_team":{
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+}
