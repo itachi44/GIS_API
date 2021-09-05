@@ -1,6 +1,6 @@
 <?php
 
-echo "test ok\n";
+
 
 $request_method = $_SERVER["REQUEST_METHOD"];
 

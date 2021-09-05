@@ -9,6 +9,7 @@ switch ($request_method) {
         break;
 
     case 'POST':
+        //ne pas oublier de hasher le mot de passe
 
         break;
     
