@@ -14,7 +14,6 @@ class District{
 
 	public function __construct($db){
 		$this->connexion = $db ;
-
 	}
 
 
