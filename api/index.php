@@ -3,6 +3,15 @@ header("Access-Control-Allow-Origin: * ");
 header("Access-Control-Allow-Headers: * ");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE, PUT");
 header("Access-Control-Max-Age: 86400");
+//transmission des données lors de la redirection
+$request_method = $_SERVER["REQUEST_METHOD"]; 
+session_start();
+$_SESSION["method"]=$request_method;
+$_SESSION["post"]=$_POST;
+$_SESSION["get"]=$_GET;
+if (json_decode(file_get_contents("php://input"))){
+        $_SESSION["data"]=$data=json_decode(file_get_contents("php://input"),True);
+}
 if($request_method == "OPTIONS"){
         header("HTTP/1.1 204 No Content");
          header("Connection: keep-alive");
@@ -68,3 +77,4 @@ if($requested_file[1]=="api"){
         }
 }
 
+/////////TODO faire les rendus ici (revoir la vidéos)

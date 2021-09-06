@@ -1,9 +1,18 @@
 <?php
 
 include_once '../Databases.php' ;
-
-//TODO generate two token for admin and simple user (get the users permissions to do it)  
-$request_method = $_SERVER["REQUEST_METHOD"]; 
+//récupérations des données
+session_start();  
+$request_method = $_SESSION["method"];
+$_POST=$_SESSION["post"];
+$_GET=$_SESSION["get"];
+if(isset($_SESSION["data"])){
+$data=$_SESSION["data"];
+}
+unset($_SESSION["method"]);
+unset($_SESSION["post"]);
+unset($_SESSION["get"]);
+session_destroy();
 use \Firebase\JWT\JWT;
 
 // TODO user doit êter caster en objet
@@ -29,8 +38,6 @@ function Auth($user){
 }
 
   function logUser($data){
-      $database = new Database();
-      $db = $database->getConnexion();
     
       if(array_key_exists(0,$data)){
       $data=$data[0];
@@ -39,13 +46,14 @@ function Auth($user){
           $email=htmlspecialchars($data["email"]);
           $password=htmlspecialchars($data["password"]);
           //TODO crypter le mot de passe
+          $database = new Database();
+          $db = $database->getConnexion();
           $stmt=$db->prepare("SELECT * FROM user WHERE email=:email");
           $stmt->execute([
               "email"=>$email
           ]);
           if($stmt->rowCount() > 0){
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            print_r($user);
           }
           //TODO on le convertit en objet php s'il existe
           $user=(object) $user;
@@ -77,9 +85,8 @@ function Auth($user){
 
   }
 
-  if($request_method=="POST"){
-            if (json_decode(file_get_contents("php://input"))){
-                    $data=json_decode(file_get_contents("php://input"),True);
+  if($request_method=='POST'){
+            if (!empty($data)){
                     logUser($data);
              }else{
                     logUser($_POST);

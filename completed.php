@@ -3,7 +3,7 @@
     include_once 'Databases.php' ;
     include_once 'District.php' ;
     $database = new Database() ;
-	$db = $database->getConnexion() ;
+	  $db = $database->getConnexion() ;
     $district = new District($db);
 
     if(isset($_POST['latitude']) && isset($_POST['longitude']) && isset($_POST["district"])){

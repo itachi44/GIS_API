@@ -8,7 +8,6 @@ class Database{
 	public $connexion ;
 
 
-	//gestion pour la connexion
 	public function getConnexion(){
 		$this->connexion = null ;
 
