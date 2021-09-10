@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '9d622a03ab8c73e702a755d95f7da427db545614',
+        'reference' => '40b9b368482a22427fd74d112f4f3ace989e80c3',
         'name' => 'gis/gis_project',
         'dev' => true,
     ),
@@ -43,7 +43,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '9d622a03ab8c73e702a755d95f7da427db545614',
+            'reference' => '40b9b368482a22427fd74d112f4f3ace989e80c3',
             'dev_requirement' => false,
         ),
         'psr/cache' => array(

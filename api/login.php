@@ -1,18 +1,8 @@
 <?php
 
 include_once '../Databases.php' ;
-//récupérations des données
-session_start();  
-$request_method = $_SESSION["method"];
-$_POST=$_SESSION["post"];
-$_GET=$_SESSION["get"];
-if(isset($_SESSION["data"])){
-$data=$_SESSION["data"];
-}
-unset($_SESSION["method"]);
-unset($_SESSION["post"]);
-unset($_SESSION["get"]);
-session_destroy();
+require "../vendor/firebase/php-jwt/src/JWT.php";
+include "config.php";
 use \Firebase\JWT\JWT;
 
 // TODO user doit êter caster en objet
@@ -20,7 +10,7 @@ function Auth($user){
     $now=new DateTimeImmutable();
     $iat=$now->getTimestamp();
     $exp=$iat+60*60*24*30; //1mois
-    $key=""; //TODO générer une clé
+    $key=GIS_KEY;
 
     $payload=array(
         "id_user"=> $user->id_user,
@@ -29,7 +19,7 @@ function Auth($user){
         "iat"=>$iat,
         "exp"=>$exp,
     );
-    $jwt = JWT::encode($payload, $key, 'HS512');
+    $jwt = JWT::encode($payload,$key, 'HS512');
     
     return array(
         "token"=>$jwt,
@@ -54,6 +44,9 @@ function Auth($user){
           ]);
           if($stmt->rowCount() > 0){
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
+          }else{
+            http_response_code(404);
+            echo json_encode(array("response"=>"cet utilisateur n'existe pas."));
           }
           //TODO on le convertit en objet php s'il existe
           $user=(object) $user;
@@ -69,7 +62,7 @@ function Auth($user){
                   echo json_encode("impossible de générer le token.", JSON_PRETTY_PRINT);
                 }
               }else{
-                echo json_encode("Mot de passe incorrect", JSON_PRETTY_PRINT);
+                echo json_encode(array("response"=>"Mot de passe incorrect"), JSON_PRETTY_PRINT);
               }
           }else{
             http_response_code(404);
@@ -78,7 +71,7 @@ function Auth($user){
           }
       }else{
         http_response_code(400);
-        echo json_encode("données invalides", JSON_PRETTY_PRINT);
+        echo json_encode("données invalides..", JSON_PRETTY_PRINT);
 
       }
 
@@ -86,13 +79,14 @@ function Auth($user){
   }
 
   if($request_method=='POST'){
-            if (!empty($data)){
-                    logUser($data);
-             }else{
-                    logUser($_POST);
-             }
-
-  }else{
-
+    if (json_decode(file_get_contents("php://input"))){
+      $data=json_decode(file_get_contents("php://input"),True);
+      if(array_key_exists(0,$data)){
+            $data=$data[0];
+      }
+      logUser($data);
+    }else{
+          logUser($_POST);
+    } 
   }
 
