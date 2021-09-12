@@ -19,10 +19,9 @@ global $decoded_data;
             } 
             }
         }
-//TODO recupérer l'email du user dans le token verifier s'il est dans la base pour pouvoir faire la suppression, la mise à jour et le récupération de données user
     
 function addUser($data){
-
+    $missing_fields=[];
     if(isset($data["last_name"]) && isset($data["first_name"]) && isset($data["email"])
      && isset($data["password"]) && isset($data["telephone"]) && isset($data["id_team"])){
         $database = new Database();
@@ -36,6 +35,7 @@ function addUser($data){
         if($stmt->rowCount()>0){
             http_response_code(400);
             echo json_encode(["response"=>"cet utilisateur existe déja!"]);
+            exit(1);
 
         }else{
             $user=(object)[
@@ -54,7 +54,7 @@ function addUser($data){
                $stmt->bindValue(':id_team', $user->id_team, PDO::PARAM_INT);
                $stmt->execute();
                http_response_code(201);
-               echo json_encode(array("response"=>"creation de l'utilisateur réussi","user"=>$user),JSON_PRETTY_PRINT);
+               echo json_encode(array("response"=>"creation de l'utilisateur réussie","user"=>$user),JSON_PRETTY_PRINT);
    
             }catch(PDOException $e){
                echo "Erreur : " . $e->getMessage();
@@ -63,8 +63,16 @@ function addUser($data){
 
 
     }else{
-        //les données sont incorrects faire les controles et afficher l'erreur
+        if(empty($data["last_name"])) array_push($missing_fields,"last_name");
+        if(empty($data["first_name"])) array_push($missing_fields,"first_name");
+        if(empty($data["email"])) array_push($missing_fields,"email");
+        if(empty($data["password"])) array_push($missing_fields,"password");
+        if(empty($data["telephone"])) array_push($missing_fields,"telephone");
+        if(empty($data["id_team"])) array_push($missing_fields,"id_team");
         http_response_code(400);
+        echo json_encode("données incorrectes. ".implode(",",$missing_fields));
+        exit(1);
+
     }
 
 }
@@ -87,6 +95,7 @@ switch ($request_method) {
                     }else{
                         http_response_code(404);
                         echo json_encode(array("response"=>"pas de donnees"));
+                        exit(1);
                     }
                     }else{
                         $id_user=$_GET["id_user"];
@@ -100,15 +109,18 @@ switch ($request_method) {
                         }else{
                             http_response_code(404);
                             echo json_encode(array("response"=>"utilisateur non trouvé"));
+                            exit(1);
                         }
                     }
             }else{
                 http_response_code(400);
                 echo json_encode(array("response"=>"permission non accordée à cet utilisateur."));
+                exit(1);
             }
         }else{
             http_response_code(400);
             echo json_encode(["response"=>"veuillez vous authentifier"]);
+            exit(1);
         }
 
         break;
@@ -164,6 +176,7 @@ switch ($request_method) {
         }else{
             http_response_code(404);
             echo json_encode(["response"=>"cet utilisateur n'existe pas"]);
+            exit(1);
         }
 
       
@@ -195,12 +208,14 @@ switch ($request_method) {
     }else{
         http_response_code(400);
         echo json_encode(["response"=>"autorisation non accordée à cet utilisateur"]);
+        exit(1);
     }
             }
 
         }else{
             http_response_code(400);
             echo json_encode(["response"=>"veuillez vous authentifier"]);
+            exit(1);
         }
 
     break;
@@ -224,6 +239,7 @@ switch ($request_method) {
                 }else{
                     http_response_code(400);
                     echo json_encode(array("response"=>"données incorrectes, veuillez entrer l'id de l'utilisateur"));
+                    exit(1);
                 }
 
             }
@@ -231,6 +247,7 @@ switch ($request_method) {
     }else{
         http_response_code(400);
         echo json_encode(["response"=>"veuillez vous authentifier"]);
+        exit(1);
     }
 
         break;

@@ -4,9 +4,9 @@
   <head>
     <meta charset="UTF-8">
     <title>GIS-API</title>
-    <link rel="stylesheet" type="text/css" href="./swagger-ui.css" />
-    <link rel="icon" type="image" href="./favicon.jpeg" sizes="32x32" />
-    <link rel="icon" type="image" href="./favicon.jpeg" sizes="16x16" />
+    <link rel="stylesheet" type="text/css" href="/api-docs/swagger-ui.css" />
+    <link rel="icon" type="image" href="api-docs/favicon-16x16.png" sizes="32x32" />
+    <link rel="icon" type="image" href="api-docs/favicon-32x32.png" sizes="16x16" />
     <style>
       html
       {
@@ -33,13 +33,13 @@
   <body>
     <div id="swagger-ui"></div>
 
-    <script src="./swagger-ui-bundle.js" charset="UTF-8"> </script>
-    <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
+    <script src="api-docs/swagger-ui-bundle.js" charset="UTF-8"> </script>
+    <script src="api-docs/swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
     <script>
     window.onload = function() {
       // Begin Swagger UI call region
       const ui = SwaggerUIBundle({
-        url: "swagger.json",
+        url: "api-docs/swagger.json",
         dom_id: '#swagger-ui',
         deepLinking: true,
         presets: [
