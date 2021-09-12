@@ -24,9 +24,22 @@ function addUser($data){
     $missing_fields=[];
     if(isset($data["last_name"]) && isset($data["first_name"]) && isset($data["email"])
      && isset($data["password"]) && isset($data["telephone"]) && isset($data["id_team"])){
-        $database = new Database();
-        $db = $database->getConnexion();
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        //check constraint of team id
+        if(!empty($data["id_team"])){
+            $database = new Database();
+            $db = $database->getConnexion();
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $st=$db->prepare("SELECT * FROM team WHERE id_team=:id_team");
+            $st->execute([
+                "id_team"=>$data["id_team"]
+            ]);
+            if($st->rowCount()==0){
+                http_response_code(400);
+                echo json_encode(["response"=>"cette équipe n'existe pas!"]);
+                exit(1);
+
+            }
+    }
         //vérifier si l'utilisateur n'existe pas encore
         $stmt=$db->prepare("SELECT * FROM user WHERE email=:email");
         $stmt->execute([
@@ -158,7 +171,22 @@ switch ($request_method) {
                     $data=$_POST;
             }
 
+    if(!empty($data)){
+        if(!empty($data["id_team"])){
+            $database = new Database();
+            $db = $database->getConnexion();
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $st=$db->prepare("SELECT * FROM team WHERE id_team=:id_team");
+            $st->execute([
+                "id_team"=>$data["id_team"]
+            ]);
+            if($st->rowCount()==0){
+                http_response_code(400);
+                echo json_encode(["response"=>"cette équipe n'existe pas!"]);
+                exit(1);
 
+            }
+    }
       $id_user=$_GET["id_user"];
       
       $cleaned_data=[];
@@ -204,7 +232,10 @@ switch ($request_method) {
         $stmt->execute();
         http_response_code(201);
         echo json_encode(array("response"=>"mise à jour effectuée avec succès."));
-
+    }else{
+        http_response_code(400);
+        echo json_encode(["response"=>"données incorrectes"]);
+    }
     }else{
         http_response_code(400);
         echo json_encode(["response"=>"autorisation non accordée à cet utilisateur"]);

@@ -31,12 +31,27 @@ function addComment($data){
         $database = new Database();
         $db = $database->getConnexion();
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        if(!empty($data["id_user"])){
+            $database = new Database();
+            $db = $database->getConnexion();
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $st=$db->prepare("SELECT * FROM user WHERE id_user=:id_user");
+            $st->execute([
+                "id_user"=>$data["id_user"]
+            ]);
+            if($st->rowCount()==0){
+                http_response_code(400);
+                echo json_encode(["response"=>"cet utilisateur n'existe pas!"]);
+                exit(1);
+    
+            }
+    }
             $comment=(object)[
                 "id_user"=>$data["id_user"],
                 "comment_content"=>$data["comment_content"]
             ];
             try{
-               $stmt=$db->prepare("INSERT INTO user(comment_content,id_user) VALUES(:comment_content,:id_user)");
+               $stmt=$db->prepare("INSERT INTO comment(comment_content,id_user) VALUES(:comment_content,:id_user)");
                $stmt->bindValue(':comment_content', $comment->comment_content, PDO::PARAM_STR);
                $stmt->bindValue(':id_user', $comment->id_user, PDO::PARAM_INT);
                $stmt->execute();
@@ -137,7 +152,22 @@ switch ($request_method) {
                     $data=$_POST;
             }
 
-
+    if(!empty($data)){
+        if(!empty($data["id_user"])){
+            $database = new Database();
+            $db = $database->getConnexion();
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $st=$db->prepare("SELECT * FROM user WHERE id_user=:id_user");
+            $st->execute([
+                "id_user"=>$data["id_user"]
+            ]);
+            if($st->rowCount()==0){
+                http_response_code(400);
+                echo json_encode(["response"=>"cet utilisateur n'existe pas!"]);
+                exit(1);
+    
+            }
+    }
       $id_comment=$_GET["id_comment"];
       
       $cleaned_data=[];
@@ -175,18 +205,22 @@ switch ($request_method) {
             
         }
         $fields=implode("",$keys_str);
-        $stmt = $db->prepare("UPDATE user SET ".$fields ." WHERE id_comment = :id_comment");
+        $stmt = $db->prepare("UPDATE comment SET ".$fields ." WHERE id_comment = :id_comment");
         foreach ($fields_values as $i=>$value) {
             $stmt->bindValue(':'.$keys[$i], $value, PDO::PARAM_STR);
         }
-        $stmt->bindValue(':id_user', $id_user, PDO::PARAM_INT);
+        $stmt->bindValue(':id_comment', $id_comment, PDO::PARAM_INT);
         $stmt->execute();
         http_response_code(201);
         echo json_encode(array("response"=>"mise à jour effectuée avec succès."));
+    }else{
+        http_response_code(400);
+        echo json_encode(["response"=>"pas de données à mettre à jour"]);
+    }
 
     }else{
         http_response_code(400);
-        echo json_encode(["response"=>"autorisation non accordée à cet utilisateur"]);
+        echo json_encode(["response"=>"veuillez entrer l'id du commentaire à mettre à jour"]);
         exit(1);
     }
             }

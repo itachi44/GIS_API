@@ -23,17 +23,31 @@ global $decoded_data;
             echo json_encode("problème avec la clé. Contacter le fournisseur");
             exit(1);
           }
-//TODO recupérer l'email du user dans le token verifier s'il est dans la base pour pouvoir faire la suppression, la mise à jour et le récupération de données user
     
 function addResource($data){
-
+    $missing_fields=[];
     if(isset($data["id_district_data"])){
-        $missing_fields=[];
         $internet_volume="";
         $number_of_tablets_used=0;
         $database = new Database();
         $db = $database->getConnexion();
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        if(!empty($data["id_district_data"])){
+            $database = new Database();
+            $db = $database->getConnexion();
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $st=$db->prepare("SELECT * FROM district_data WHERE id_district_data=:id_district_data");
+            $st->execute([
+                "id_district_data"=>$data["id_district_data"]
+            ]);
+            if($st->rowCount()==0){
+                http_response_code(400);
+                echo json_encode(["response"=>"ce rapport n'existe pas!"]);
+                exit(1);
+
+            }
+    }
 
                 if(isset($data["internet_volume"])){
                     $internet_volume=$data["internet_volume"];
@@ -141,6 +155,22 @@ switch ($request_method) {
                     $data=$_POST;
             }
 
+    if(!empty($data)){
+        if(!empty($data["id_district_data"])){
+            $database = new Database();
+            $db = $database->getConnexion();
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $st=$db->prepare("SELECT * FROM district_data WHERE id_district_data=:id_district_data");
+            $st->execute([
+                "id_district_data"=>$data["id_district_data"]
+            ]);
+            if($st->rowCount()==0){
+                http_response_code(400);
+                echo json_encode(["response"=>"ce rapport n'existe pas!"]);
+                exit(1);
+
+            }
+    }
 
       $id_resource=$_GET["id_resource"];
       
@@ -187,10 +217,14 @@ switch ($request_method) {
         $stmt->execute();
         http_response_code(201);
         echo json_encode(array("response"=>"mise à jour effectuée avec succès."));
+    }else{
+        http_response_code(400);
+        echo json_encode(["response"=>"aucune données à mettre à jour."]);
+    }
 
     }else{
         http_response_code(400);
-        echo json_encode(["response"=>"autorisation non accordée à cet utilisateur"]);
+        echo json_encode(["response"=>"veuillez entrer l'id de la ressource"]);
         exit(1);
     }
             }

@@ -23,17 +23,15 @@ global $decoded_data;
             echo json_encode("problème avec la clé. Contacter le fournisseur");
             exit(1);
           }
-//TODO recupérer l'email du user dans le token verifier s'il est dans la base pour pouvoir faire la suppression, la mise à jour et le récupération de données user
     
 function addTeam($data){
-
+    $missing_fields=[];
     if(isset($data["team_name"])){
-        $missing_fields=[];
         $database = new Database();
         $db = $database->getConnexion();
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         //vérifier si l'équipe n'existe pas encore
-        $stmt=$db->prepare("SELECT * FROM user WHERE team_name=:team_name");
+        $stmt=$db->prepare("SELECT * FROM team WHERE team_name=:team_name");
         $stmt->execute([
             "team_name"=>$data["team_name"]
         ]);
@@ -73,7 +71,7 @@ switch ($request_method) {
             $stmt=$db->prepare("SELECT * FROM user WHERE email=:email");
             $stmt->execute(["email"=>$decoded_data->email]);
             if($stmt->rowCount() > 0){
-                if(empty($_GET["id_user"])){
+                if(empty($_GET["id_team"])){
                     $stmt=$db->prepare("SELECT * FROM team");
                     $stmt->execute();
                     if($stmt->rowCount() > 0){
@@ -134,8 +132,7 @@ switch ($request_method) {
             $stmt=$db->prepare("SELECT * FROM user WHERE email=:email");
             $stmt->execute(["email"=>$decoded_data->email]);
             if($stmt->rowCount() > 0){
-                            if(isset($_GET["id_team"]) && !empty($_GET["id_team"])){
-
+            if(isset($_GET["id_team"]) && !empty($_GET["id_team"])){
             //récupération des données
             if(json_decode(file_get_contents("php://input"))){
                     $data=json_decode(file_get_contents("php://input"),True);
@@ -145,6 +142,7 @@ switch ($request_method) {
             }else{
                     $data=$_POST;
             }
+    if(!empty($data)){
 
 
       $id_team=$_GET["id_team"];
@@ -192,10 +190,15 @@ switch ($request_method) {
         $stmt->execute();
         http_response_code(201);
         echo json_encode(array("response"=>"mise à jour effectuée avec succès."));
+    }else{
+        http_response_code(400);
+        echo json_encode(array("response"=>"pas de données à mettre à jour"));
+        exit(1);
+    }
 
     }else{
         http_response_code(400);
-        echo json_encode(["response"=>"autorisation non accordée à cet utilisateur"]);
+        echo json_encode(["response"=>"données incorrectes, veuillez entrer l'id de l'équipe"]);
         exit(1);
     }
             }

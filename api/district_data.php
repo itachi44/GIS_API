@@ -27,7 +27,7 @@ global $decoded_data;
 // id_user et id_centroid seront récupérés à la connexion de l'utilisateur et seront stocker dans le client pour être envoyé dans la requête
 // MCD_name, MCD_tel, used_range, received_sample, tested_sample, non-conforming_sample seront envoyées par le client après avoir fait le fetching depuis une api externe
 function addReport($data){
-
+    $missing_fields=[];
     if(isset($data["id_user"]) && isset($data["id_centroid"]) && isset($data["allocated_range"])  && isset($data["date"]) 
     && isset($data["used_range"]) && isset($data["received_sample"]) && isset($data["tested_sample"]) && isset($data["non-conforming_sample"])){
         $mcd_name="";
@@ -36,8 +36,8 @@ function addReport($data){
         $ending_time="";
         $comment="";
         //TODO traiter les données : allocated range, date etc
-        $date=new \DateTime($data["date"]);
-
+        $date = new DateTime($data["date"]);
+        $date= $date->format('Y-m-d H:i:s');
         //données secondaires
         if(isset($data["MCD_name"])){
             $mcd_name=$data["MCD_name"];
@@ -46,10 +46,12 @@ function addReport($data){
             $mcd_tel=$data["MCD_tel"];
         }
         if(isset($data["starting_time"])){
-            $starting_time=$data["starting_time"];
+            $starting_time=new DateTime($data["starting_time"]);
+            $starting_time=$starting_time->format('H:i:s');
         }
         if(isset($data["ending_time"])){
-            $ending_time=$data["ending_time"];
+            $ending_time=new DateTime($data["ending_time"]);
+            $ending_time=$ending_time->format('H:i:s');
         }
         if(isset($data["comment"])){
             $comment=$data["comment"];
@@ -58,6 +60,36 @@ function addReport($data){
         $database = new Database();
         $db = $database->getConnexion();
         $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        if(!empty($data["id_user"])){
+            $database = new Database();
+            $db = $database->getConnexion();
+            $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $st=$db->prepare("SELECT * FROM user WHERE id_user=:id_user");
+            $st->execute([
+                "id_user"=>$data["id_user"]
+            ]);
+            if($st->rowCount()==0){
+                http_response_code(400);
+                echo json_encode(["response"=>"cet utilisateur n'existe pas!"]);
+                exit(1);
+
+            }
+    }
+    if(!empty($data["id_centroid"])){
+        $database = new Database();
+        $db = $database->getConnexion();
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $st=$db->prepare("SELECT * FROM centroids79districts WHERE id_district=:id_district");
+        $st->execute([
+            "id_district"=>$data["id_centroid"]
+        ]);
+        if($st->rowCount()==0){
+            http_response_code(400);
+            echo json_encode(["response"=>"ce district n'existe pas!"]);
+            exit(1);
+
+        }
+}
         $context=[
             "MCD_name"=>$mcd_name,
             "MCD_tel"=>$mcd_tel,
@@ -182,18 +214,48 @@ switch ($request_method) {
                     $data=$_POST;
             }
 
-
+    if(!empty($data)){
       $id_district_data=$_GET["id_district_data"];
+      if(!empty($data["id_user"])){
+        $database = new Database();
+        $db = $database->getConnexion();
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $st=$db->prepare("SELECT * FROM user WHERE id_user=:id_user");
+        $st->execute([
+            "id_user"=>$data["id_user"]
+        ]);
+        if($st->rowCount()==0){
+            http_response_code(400);
+            echo json_encode(["response"=>"cet utilisateur n'existe pas!"]);
+            exit(1);
+
+        }
+}
+if(!empty($data["id_centroid"])){
+    $database = new Database();
+    $db = $database->getConnexion();
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $st=$db->prepare("SELECT * FROM centroids79districts WHERE id_district=:id_centroid");
+    $st->execute([
+        "id_centroid"=>$data["id_centroid"]
+    ]);
+    if($st->rowCount()==0){
+        http_response_code(400);
+        echo json_encode(["response"=>"ce district n'existe pas!"]);
+        exit(1);
+
+    }
+}
       
       $cleaned_data=[];
       foreach($data as $key=>$value){
-            $cleaned_data[$key]=htmlspecialchars($value);
+            $cleaned_data[$key]=$value;
       }
 
       //récupération de l'entité à mettre à jour
 
-        $stmt=$db->prepare("SELECT * FROM district_data WHERE id_district_data=:id_report");
-        $stmt->bindValue(':id_report',$id_district_data, PDO::PARAM_INT);
+        $stmt=$db->prepare("SELECT * FROM district_data WHERE id_district_data=:id_district_data");
+        $stmt->bindValue(':id_district_data',$id_district_data, PDO::PARAM_INT);
         $stmt->execute();
         if($stmt->rowCount()>0){
             $report=$stmt->fetch(PDO::FETCH_ASSOC);
@@ -220,18 +282,26 @@ switch ($request_method) {
             
         }
         $fields=implode("",$keys_str);
-        $stmt = $db->prepare("UPDATE district_data SET ".$fields ." WHERE id_district_data = :id_report");
+        $context=[];
+        $stmt = $db->prepare("UPDATE district_data SET ".$fields ." WHERE id_district_data=:id_district_data");
         foreach ($fields_values as $i=>$value) {
-            $stmt->bindValue(':'.$keys[$i], $value, PDO::PARAM_STR);
+            $context[$keys[$i]]=$value;
+            //$stmt->bindValue(':'.$keys[$i], $value);
         }
-        $stmt->bindValue(':id_report', $id_district_data, PDO::PARAM_INT);
-        $stmt->execute();
-        http_response_code(201);
+        $context[':id_district_data']=$id_district_data;
+        //$stmt->bindValue(':id_district_data', $id_district_data, PDO::PARAM_INT);
+        $stmt->execute($context);
+        http_response_code(200);
         echo json_encode(array("response"=>"mise à jour effectuée avec succès."));
+    }else{
+        http_response_code(400);
+        echo json_encode(["response"=>"pas de données à mettre à jour"]);
+        exit(1);
+    }
 
     }else{
         http_response_code(400);
-        echo json_encode(["response"=>"autorisation non accordée à cet utilisateur"]);
+        echo json_encode(["response"=>"veuillez entrer l'id du rapport."]);
         exit(1);
     }
             }

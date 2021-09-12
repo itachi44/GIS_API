@@ -1177,7 +1177,7 @@
               "tested_sample":{
                 "type": "integer"
               },
-              "non-conforming_sample":{
+              "non_conforming_sample":{
                 "type": "integer"
               },
               "id_user":{
