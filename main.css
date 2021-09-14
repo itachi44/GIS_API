@@ -128,3 +128,11 @@ button:hover {
 	background-position:right;
 }
 
+
+.live::before {
+    content: ".";
+    color: red;
+    float: left;
+    transform: scale(1.8);
+
+  }
