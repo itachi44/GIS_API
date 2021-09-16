@@ -23,7 +23,7 @@
     }
     ?>
   
-<div style="min-height:800px; margin:0; padding:0;" class="container-fluid">
+<div style="min-height:500px; margin:0; padding:0;" class="container-fluid">
 <!--Modal-START-->
 
 
@@ -70,7 +70,7 @@
   </ul>
 </div>
       <form id="search_district" style="width:40%;" class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Rechercher un district" aria-label="Search">
+        <input id="_district_" class="form-control me-2" type="search" placeholder="Rechercher un district" aria-label="Search">
         <button  class="btn btn-outline-success" type="submit">rechercher</button>
       </form>
     </div>
@@ -169,6 +169,25 @@
             }
 
 
+            document.getElementById("search_district").addEventListener("submit",function(e){
+            e.preventDefault();
+            let district_name = document.getElementById("_district_").value;
+            $.ajax({
+                 type: 'POST',
+                 contentType: 'application/json',
+                 url: 'district_info.php',
+                 data: JSON.stringify({district: district_name}),
+                 success:function(data){
+                    console.log(data.coordinates);
+                 },
+                 error: function(error){
+                     console.log("error");
+                    console.log(error);
+                 }
+                });
+
+    //récupérer la valeur du champ et l'envoyer par POST vers search_district.php
+})
 
             //initializing map 
             let mylat = '14.71005856';
