@@ -220,8 +220,8 @@
                     // marker._icon.style.width = "5em";
                     // marker._icon.style.height = "5em";
                     */
-                    var tooltip = $('.leaflet-tooltip');
-                    tooltip.css('font-size', 25);
+                    // var tooltip = $('.leaflet-tooltip');
+                    // tooltip.css('font-size', 25);
 
                 },
                 error: function(error) {
