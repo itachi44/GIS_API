@@ -9,10 +9,10 @@ html,body{
     margin: 0;
     padding: 0;
   }
-  .my-label{
+.my-label{
       transform:scale(0.5);
       font-size:0.7em;
-  }
+}
 
 #legende {
     text-align: left;
