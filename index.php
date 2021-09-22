@@ -7,10 +7,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="leaflet/leaflet.css" />
-    <link rel="stylesheet" type="text/css" href="main.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/main.css" />
     <link rel="shortcut icon" type="image" href="icon/favicon.jpeg" />
     <script type="text/javascript" src="leaflet/leaflet.js"></script>
-    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="assets/scripts/jquery.min.js"></script>
     <title>GIS Suivi du déploiement</title>
 </head>
 
@@ -179,13 +179,14 @@
         let background = L.tileLayer(link);
         background.addTo(map);
 
+        //Changement de vue de la carte
 
         function changeBackgroundTo(link){
             map.removeLayer(background);
             background = L.tileLayer(link);
             background.addTo(map);
         }
-        //Changement de vue de la carte
+
         document.getElementById("vs").addEventListener("click", function() {
             changeBackgroundTo('https://api.mapbox.com/styles/v1/frouty/ckttz0g0b0swb18pmuz7vf9s8/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZnJvdXR5IiwiYSI6ImNrdHR5NGZrZDF1eWIybm1wbHE1anEwMmkifQ.hdvcG_84hG2O8fUo3hcd8w');
         });
