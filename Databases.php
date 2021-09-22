@@ -1,10 +1,10 @@
 <?php
 class Database{
 	// Connexion à la base de données
-	private $host = "localhost:3306" ;
+	private $host = "localhost:8889" ;
 	private $db_name = "Districts" ;
 	private $username = "root";
-	private $password =  "";
+	private $password =  "root";
 	public $connexion ;
 
 
@@ -21,5 +21,3 @@ class Database{
 		return $this->connexion ;
 	}
 }
-
-?>
