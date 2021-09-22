@@ -73,6 +73,14 @@ function addUser($data)
                 $stmt->bindValue(':id_team', $user->id_team, PDO::PARAM_INT);
                 $stmt->execute();
                 http_response_code(201);
+                //récupérer l'objet dans la BD
+                $st = $db->prepare("SELECT * FROM user WHERE email=:email");
+                $st->execute([
+                    "email" => $data["email"]
+                ]);
+                if ($st->rowCount() > 0) {
+                    $user = $st->fetch(PDO::FETCH_ASSOC);
+                }
                 echo json_encode(array("response" => "creation de l'utilisateur réussie", "user" => $user), JSON_PRETTY_PRINT);
             } catch (PDOException $e) {
                 echo "Erreur : " . $e->getMessage();
