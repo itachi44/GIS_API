@@ -15,23 +15,23 @@
         }
     ],
     "securityDefinitions": {
-      "JWT": {
-        "type": "apiKey",
-        "name": "Authorization",
-        "in": "header"
-      }
+        "JWT": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
     },
     "paths": {
         "/comment": {
             "get": {
                 "tags": [
                     "Comment"
-                  ],
-                  "security": [
+                ],
+                "security": [
                     {
-                          "JWT": []
-                     }
-                        ],
+                        "JWT": []
+                    }
+                ],
                 "summary": "Récupérer tous les commentaires",
                 "responses": {
                     "200": {
@@ -49,8 +49,8 @@
                     },
                     "405": {
                         "description": "Permission non accordée"
-                      },
-                    "500":{
+                    },
+                    "500": {
                         "description": "erreur serveur"
                     }
                 }
@@ -58,14 +58,14 @@
             "post": {
                 "tags": [
                     "Comment"
-                  ],
-              "security": [
-               {
-                     "JWT": []
-                }
-                   ],
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
                 "summary": "Création d'un nouveau commentaire",
-                "requestBody":{
+                "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
@@ -75,7 +75,7 @@
                                 }
                             }
                         }
-                      }
+                    }
                 },
                 "responses": {
                     "201": {
@@ -91,12 +91,12 @@
                             }
                         }
                     },
-                    "400":{
+                    "400": {
                         "description": "entrées invalides"
                     },
                     "405": {
                         "description": "Permission non accordée"
-                      }
+                    }
                 }
             }
         },
@@ -104,12 +104,12 @@
             "get": {
                 "tags": [
                     "Comment"
-                  ],
-                  "security": [
+                ],
+                "security": [
                     {
-                          "JWT": []
-                     }
-                        ],
+                        "JWT": []
+                    }
+                ],
                 "summary": "Récupérer un commentaire spécifique",
                 "parameters": [
                     {
@@ -136,82 +136,81 @@
                             }
                         }
                     },
-                    "400":{
+                    "400": {
                         "description": "Invalid Id_comment"
                     },
-                    "404":{
+                    "404": {
                         "description": "commentaire non trouvé"
                     }
                 }
             },
             "put": {
                 "tags": [
-                  "Comment"
+                    "Comment"
                 ],
                 "security": [
                     {
-                          "JWT": []
-                     }
-                        ],
+                        "JWT": []
+                    }
+                ],
                 "summary": "Mettre à jour un commentaire existant",
                 "parameters": [
-                  {
-                      "name": "id_comment",
-                      "in": "path",
-                      "description": "id de la ressource commentaire",
-                      "required": true,
-                      "schema": {
-                          "type": "integer"
-                      }
-                  }
-              ],
-              "requestBody":{
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "type": "array",
-                              "items": {
-                                  "$ref": "#/components/schemas/Comment"
-                              }
-                          }
-                      }
+                    {
+                        "name": "id_comment",
+                        "in": "path",
+                        "description": "id de la ressource commentaire",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
-              },
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Comment"
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
-                  "200": {
-                      "description": "Commentaire modifié avec succés",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "type": "array",
-                                  "items": {
-                                      "$ref": "#/components/schemas/Comment"
-                                  }
-                              }
-                          }
-                      }
-                  },
-                  "400": {
-                      "description": "Invalid ID_comment"
+                    "200": {
+                        "description": "Commentaire modifié avec succés",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Comment"
+                                    }
+                                }
+                            }
+                        }
                     },
-                  "404": {
-                    "description": "Commentaire non trouvé"
-                  },
-                  "405": {
-                    "description": "Permission non accordée"
-                  }
+                    "400": {
+                        "description": "Invalid ID_comment"
+                    },
+                    "404": {
+                        "description": "Commentaire non trouvé"
+                    },
+                    "405": {
+                        "description": "Permission non accordée"
+                    }
                 }
-                  
-              },
+            },
             "delete": {
                 "tags": [
                     "Comment"
-                  ],
-                  "security": [
+                ],
+                "security": [
                     {
-                          "JWT": []
-                     }
-                        ],
+                        "JWT": []
+                    }
+                ],
                 "summary": "Suppression d'un commentaire",
                 "parameters": [
                     {
@@ -238,810 +237,846 @@
                             }
                         }
                     },
-                    "400":{
+                    "400": {
                         "description": "Invalid id_comment"
                     },
-                    "404":{
+                    "404": {
                         "description": "commentaire non trouvé"
                     },
                     "405": {
                         "description": "Permission non accordée"
-                      }
+                    }
                 }
             }
         },
-        "/district_data": {
-          "get": {
-              "tags": [
-                  "District_data"
+        "/report": {
+            "get": {
+                "tags": [
+                    "report"
                 ],
                 "security": [
-                  {
+                    {
                         "JWT": []
-                   }
-                      ],
-              "summary": "Récupérer toutes les données postées pour tous les districts",
-              "responses": {
-                  "200": {
-                      "description": "tous les données",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "type": "array",
-                                  "items": {
-                                      "$ref": "#/components/schemas/District_data"
-                                  }
-                              }
-                          }
-                      }
-                  },
-                  "405": {
-                      "description": "Permission non accordée"
+                    }
+                ],
+                "summary": "Récupérer toutes les données postées pour tous les districts",
+                "responses": {
+                    "200": {
+                        "description": "tous les données",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/report"
+                                    }
+                                }
+                            }
+                        }
                     },
-                  "500":{
-                      "description": "erreur serveur"
-                  }
-              }
-          },
-          "post": {
-              "tags": [
-                  "District_data"
-                ],
-            "security": [
-             {
-                   "JWT": []
-              }
-                 ],
-              "summary": "Création d'un nouveau rapport pour un district",
-              "requestBody":{
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "type": "array",
-                              "items": {
-                                  "$ref": "#/components/schemas/District_data"
-                              }
-                          }
-                      }
-                    }
-              },
-              "responses": {
-                  "201": {
-                      "description": "le rapport qui a été créé",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "type": "array",
-                                  "items": {
-                                      "$ref": "#/components/schemas/District_data"
-                                  }
-                              }
-                          }
-                      }
-                  },
-                  "400":{
-                      "description": "entrées invalides"
-                  },
-                  "405": {
-                      "description": "Permission non accordée"
-                    }
-              }
-          }
-      },
-      "/District_data?id_district_data={id_comment}": {
-        "get": {
-            "tags": [
-                "District_data"
-              ],
-              "security": [
-                {
-                      "JWT": []
-                 }
-                    ],
-            "summary": "Récupérer un rapport de district spécifique",
-            "parameters": [
-                {
-                    "name": "id_district_data",
-                    "in": "path",
-                    "description": "id du rapport",
-                    "required": true,
-                    "schema": {
-                        "type": "integer"
+                    "405": {
+                        "description": "Permission non accordée"
+                    },
+                    "500": {
+                        "description": "erreur serveur"
                     }
                 }
-            ],
-            "responses": {
-                "200": {
-                    "description": "le rapport récupéré",
+            },
+            "post": {
+                "tags": [
+                    "report"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Création d'un nouveau rapport pour un district",
+                "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
                                 "type": "array",
                                 "items": {
-                                    "$ref": "#/components/schemas/District_data"
+                                    "$ref": "#/components/schemas/report"
                                 }
                             }
                         }
                     }
                 },
-                "400":{
-                    "description": "Invalid Id_district_data"
-                },
-                "404":{
-                    "description": "rapport non trouvé"
+                "responses": {
+                    "201": {
+                        "description": "le rapport qui a été créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/report"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "entrées invalides"
+                    },
+                    "405": {
+                        "description": "Permission non accordée"
+                    }
                 }
             }
         },
-        "put": {
-            "tags": [
-              "District_data"
-            ],
-            "security": [
-                {
-                      "JWT": []
-                 }
-                    ],
-            "summary": "Mettre à jour un rapport existant",
-            "parameters": [
-              {
-                  "name": "id_district_data",
-                  "in": "path",
-                  "description": "id du rapport",
-                  "required": true,
-                  "schema": {
-                      "type": "integer"
-                  }
-              }
-          ],
-          "requestBody":{
-              "content": {
-                  "application/json": {
-                      "schema": {
-                          "type": "array",
-                          "items": {
-                              "$ref": "#/components/schemas/District_data"
-                          }
-                      }
-                  }
-                }
-          },
-            "responses": {
-              "200": {
-                  "description": "rapport modifié avec succés",
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "type": "array",
-                              "items": {
-                                  "$ref": "#/components/schemas/District_data"
-                              }
-                          }
-                      }
-                  }
-              },
-              "400": {
-                  "description": "Invalid ID_district_data"
-                },
-              "404": {
-                "description": "rapport non trouvé"
-              },
-              "405": {
-                "description": "Permission non accordée"
-              }
-            }
-              
-          },
-        "delete": {
-            "tags": [
-                "District_data"
-              ],
-              "security": [
-                {
-                      "JWT": []
-                 }
-                    ],
-            "summary": "Suppression d'un rapport",
-            "parameters": [
-                {
-                    "name": "id_district_data",
-                    "in": "path",
-                    "description": "id du rapport",
-                    "required": true,
-                    "schema": {
-                        "type": "integer"
+        "/centroid?code_district={code_district}": {
+            "get": {
+                "tags": [
+                    "Dictrict"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Récupérer les informations d'un district grace à son code",
+                "parameters": [
+                    {
+                        "name": "code_district",
+                        "in": "path",
+                        "description": "district code",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "le district récupéré",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/district"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid district code"
+                    },
+                    "404": {
+                        "description": "district non trouvé"
                     }
                 }
-            ],
-            "responses": {
-                "200": {
-                    "description": "le rapport a été supprimé",
+            }
+        },
+        "/report?id_report={id_report}": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Récupérer un rapport de district spécifique",
+                "parameters": [
+                    {
+                        "name": "id_report",
+                        "in": "path",
+                        "description": "id du rapport",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "le rapport récupéré",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/report"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Id_report"
+                    },
+                    "404": {
+                        "description": "rapport non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "report"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Mettre à jour un rapport existant",
+                "parameters": [
+                    {
+                        "name": "id_report",
+                        "in": "path",
+                        "description": "id du rapport",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
                     "content": {
                         "application/json": {
                             "schema": {
                                 "type": "array",
                                 "items": {
-                                    "$ref": "#/components/schemas/District_data"
+                                    "$ref": "#/components/schemas/report"
                                 }
                             }
                         }
                     }
                 },
-                "400":{
-                    "description": "Invalid id_district_data"
-                },
-                "404":{
-                    "description": "rapport non trouvé"
-                },
-                "405": {
-                    "description": "Permission non accordée"
-                  }
-            }
-        }
-    },
-    "/District_data?id_district={id_district}": {
-      "get": {
-          "tags": [
-              "District_data"
-            ],
-            "security": [
-              {
-                    "JWT": []
-               }
-                  ],
-          "summary": "Récupérer les informations pour un district spécifique",
-          "parameters": [
-              {
-                  "name": "id_district",
-                  "in": "path",
-                  "description": "id du district",
-                  "required": true,
-                  "schema": {
-                      "type": "integer"
-                  }
-              }
-          ],
-          "responses": {
-              "200": {
-                  "description": "les informations récupérées",
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "type": "array",
-                              "items": {
-                                  "$ref": "#/components/schemas/Distict_data"
-                              }
-                          }
-                      }
-                  }
-              },
-              "400":{
-                  "description": "Invalid Id_district"
-              },
-              "404":{
-                  "description": "district non trouvé"
-              }
-          }
-      }
-  },
-  "/resource": {
-    "get": {
-        "tags": [
-            "Resource"
-          ],
-          "security": [
-            {
-                  "JWT": []
-             }
+                "responses": {
+                    "200": {
+                        "description": "rapport modifié avec succés",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/report"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID_report"
+                    },
+                    "404": {
+                        "description": "rapport non trouvé"
+                    },
+                    "405": {
+                        "description": "Permission non accordée"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "report"
                 ],
-        "summary": "Récupérer toutes les resources",
-        "responses": {
-            "200": {
-                "description": "toutes les resources",
-                "content": {
-                    "application/json": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Suppression d'un rapport",
+                "parameters": [
+                    {
+                        "name": "id_report",
+                        "in": "path",
+                        "description": "id du rapport",
+                        "required": true,
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/components/schemas/Resource"
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "le rapport a été supprimé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/report"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid id_report"
+                    },
+                    "404": {
+                        "description": "rapport non trouvé"
+                    },
+                    "405": {
+                        "description": "Permission non accordée"
+                    }
+                }
+            }
+        },
+        "/report?id_district={id_district}": {
+            "get": {
+                "tags": [
+                    "report"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Récupérer les informations pour un district spécifique",
+                "parameters": [
+                    {
+                        "name": "id_district",
+                        "in": "path",
+                        "description": "id du district",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "les informations récupérées",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Distict_data"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Id_district"
+                    },
+                    "404": {
+                        "description": "district non trouvé"
+                    }
+                }
+            }
+        },
+        "/resource": {
+            "get": {
+                "tags": [
+                    "Resource"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Récupérer toutes les resources",
+                "responses": {
+                    "200": {
+                        "description": "toutes les resources",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Resource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "405": {
+                        "description": "Permission non accordée"
+                    },
+                    "500": {
+                        "description": "erreur serveur"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Resource"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Création d'une ressource",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Resource"
+                                }
                             }
                         }
                     }
-                }
-            },
-            "405": {
-                "description": "Permission non accordée"
-              },
-            "500":{
-                "description": "erreur serveur"
-            }
-        }
-    },
-    "post": {
-        "tags": [
-            "Resource"
-          ],
-      "security": [
-       {
-             "JWT": []
-        }
-           ],
-        "summary": "Création d'une ressource",
-        "requestBody":{
-            "content": {
-                "application/json": {
-                    "schema": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Resource"
+                },
+                "responses": {
+                    "201": {
+                        "description": "la ressource qui a été créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Resource"
+                                    }
+                                }
+                            }
                         }
+                    },
+                    "400": {
+                        "description": "entrées invalides"
+                    },
+                    "405": {
+                        "description": "Permission non accordée"
                     }
                 }
-              }
+            }
         },
-        "responses": {
-            "201": {
-                "description": "la ressource qui a été créé",
-                "content": {
-                    "application/json": {
+        "/resource?id_resource={id_resource}": {
+            "get": {
+                "tags": [
+                    "Resource"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Récupérer une ressource spécifique",
+                "parameters": [
+                    {
+                        "name": "id_resource",
+                        "in": "path",
+                        "description": "id de la ressource à récupérer",
+                        "required": true,
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/components/schemas/Resource"
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "la ressource récupéré",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Resource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Id_resource"
+                    },
+                    "404": {
+                        "description": "ressource non trouvé"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Resource"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Mettre à jour une ressource existant",
+                "parameters": [
+                    {
+                        "name": "id_resource",
+                        "in": "path",
+                        "description": "id de la ressource",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Resource"
+                                }
                             }
                         }
                     }
+                },
+                "responses": {
+                    "200": {
+                        "description": "ressource modifié avec succés",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Resource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID_resource"
+                    },
+                    "404": {
+                        "description": "resource non trouvé"
+                    },
+                    "405": {
+                        "description": "Permission non accordée"
+                    }
                 }
             },
-            "400":{
-                "description": "entrées invalides"
+            "delete": {
+                "tags": [
+                    "Resource"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Suppression d'une ressource",
+                "parameters": [
+                    {
+                        "name": "id_resource",
+                        "in": "path",
+                        "description": "id de la ressource",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "la ressource a été supprimé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Resource"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid id_resource"
+                    },
+                    "404": {
+                        "description": "ressource non trouvé"
+                    },
+                    "405": {
+                        "description": "Permission non accordée"
+                    }
+                }
+            }
+        },
+        "/team": {
+            "get": {
+                "tags": [
+                    "Team"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Récupérer toutes les équipes",
+                "responses": {
+                    "200": {
+                        "description": "toutes les équipes",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Team"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "405": {
+                        "description": "Permission non accordée"
+                    },
+                    "500": {
+                        "description": "erreur serveur"
+                    }
+                }
             },
-            "405": {
-                "description": "Permission non accordée"
-              }
-        }
-    }
-},
-"/resource?id_resource={id_resource}": {
-  "get": {
-      "tags": [
-          "Resource"
-        ],
-        "security": [
-          {
-                "JWT": []
-           }
-              ],
-      "summary": "Récupérer une ressource spécifique",
-      "parameters": [
-          {
-              "name": "id_resource",
-              "in": "path",
-              "description": "id de la ressource à récupérer",
-              "required": true,
-              "schema": {
-                  "type": "integer"
-              }
-          }
-      ],
-      "responses": {
-          "200": {
-              "description": "la ressource récupéré",
-              "content": {
-                  "application/json": {
-                      "schema": {
-                          "type": "array",
-                          "items": {
-                              "$ref": "#/components/schemas/Resource"
-                          }
-                      }
-                  }
-              }
-          },
-          "400":{
-              "description": "Invalid Id_resource"
-          },
-          "404":{
-              "description": "ressource non trouvé"
-          }
-      }
-  },
-  "put": {
-      "tags": [
-        "Resource"
-      ],
-      "security": [
-          {
-                "JWT": []
-           }
-              ],
-      "summary": "Mettre à jour une ressource existant",
-      "parameters": [
-        {
-            "name": "id_resource",
-            "in": "path",
-            "description": "id de la ressource",
-            "required": true,
-            "schema": {
-                "type": "integer"
-            }
-        }
-    ],
-    "requestBody":{
-        "content": {
-            "application/json": {
-                "schema": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/components/schemas/Resource"
+            "post": {
+                "tags": [
+                    "Team"
+                ],
+                "security": [
+                    {
+                        "JWT": []
                     }
-                }
-            }
-          }
-    },
-      "responses": {
-        "200": {
-            "description": "ressource modifié avec succés",
-            "content": {
-                "application/json": {
-                    "schema": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Resource"
+                ],
+                "summary": "Création d'une équipe",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Team"
+                                }
+                            }
                         }
                     }
+                },
+                "responses": {
+                    "201": {
+                        "description": "l'équipe qui a été créé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Team"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "entrées invalides"
+                    },
+                    "405": {
+                        "description": "Permission non accordée"
+                    }
                 }
             }
         },
-        "400": {
-            "description": "Invalid ID_resource"
-          },
-        "404": {
-          "description": "resource non trouvé"
-        },
-        "405": {
-          "description": "Permission non accordée"
-        }
-      }
-        
-    },
-  "delete": {
-      "tags": [
-          "Resource"
-        ],
-        "security": [
-          {
-                "JWT": []
-           }
-              ],
-      "summary": "Suppression d'une ressource",
-      "parameters": [
-          {
-              "name": "id_resource",
-              "in": "path",
-              "description": "id de la ressource",
-              "required": true,
-              "schema": {
-                  "type": "integer"
-              }
-          }
-      ],
-      "responses": {
-          "200": {
-              "description": "la ressource a été supprimé",
-              "content": {
-                  "application/json": {
-                      "schema": {
-                          "type": "array",
-                          "items": {
-                              "$ref": "#/components/schemas/Resource"
-                          }
-                      }
-                  }
-              }
-          },
-          "400":{
-              "description": "Invalid id_resource"
-          },
-          "404":{
-              "description": "ressource non trouvé"
-          },
-          "405": {
-              "description": "Permission non accordée"
-            }
-      }
-  }
-},
-
-"/team": {
-  "get": {
-      "tags": [
-          "Team"
-        ],
-        "security": [
-          {
-                "JWT": []
-           }
-              ],
-      "summary": "Récupérer toutes les équipes",
-      "responses": {
-          "200": {
-              "description": "toutes les équipes",
-              "content": {
-                  "application/json": {
-                      "schema": {
-                          "type": "array",
-                          "items": {
-                              "$ref": "#/components/schemas/Team"
-                          }
-                      }
-                  }
-              }
-          },
-          "405": {
-              "description": "Permission non accordée"
+        "/team?id_team={id_team}": {
+            "get": {
+                "tags": [
+                    "Team"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Récupérer une équipe spécifique",
+                "parameters": [
+                    {
+                        "name": "id_team",
+                        "in": "path",
+                        "description": "id de l'équipe à récupérer",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "l'équipe récupéré",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Team"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Id_team"
+                    },
+                    "404": {
+                        "description": "équipe non trouvé"
+                    }
+                }
             },
-          "500":{
-              "description": "erreur serveur"
-          }
-      }
-  },
-  "post": {
-      "tags": [
-          "Team"
-        ],
-    "security": [
-     {
-           "JWT": []
-      }
-         ],
-      "summary": "Création d'une équipe",
-      "requestBody":{
-          "content": {
-              "application/json": {
-                  "schema": {
-                      "type": "array",
-                      "items": {
-                          "$ref": "#/components/schemas/Team"
-                      }
-                  }
-              }
-            }
-      },
-      "responses": {
-          "201": {
-              "description": "l'équipe qui a été créé",
-              "content": {
-                  "application/json": {
-                      "schema": {
-                          "type": "array",
-                          "items": {
-                              "$ref": "#/components/schemas/Team"
-                          }
-                      }
-                  }
-              }
-          },
-          "400":{
-              "description": "entrées invalides"
-          },
-          "405": {
-              "description": "Permission non accordée"
-            }
-      }
-  }
-},
-"/team?id_team={id_team}": {
-"get": {
-    "tags": [
-        "Team"
-      ],
-      "security": [
-        {
-              "JWT": []
-         }
-            ],
-    "summary": "Récupérer une équipe spécifique",
-    "parameters": [
-        {
-            "name": "id_team",
-            "in": "path",
-            "description": "id de l'équipe à récupérer",
-            "required": true,
-            "schema": {
-                "type": "integer"
-            }
-        }
-    ],
-    "responses": {
-        "200": {
-            "description": "l'équipe récupéré",
-            "content": {
-                "application/json": {
-                    "schema": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Team"
+            "put": {
+                "tags": [
+                    "Team"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Mettre à jour une équipe existante",
+                "parameters": [
+                    {
+                        "name": "id_team",
+                        "in": "path",
+                        "description": "id de l'équipe",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
                         }
                     }
-                }
-            }
-        },
-        "400":{
-            "description": "Invalid Id_team"
-        },
-        "404":{
-            "description": "équipe non trouvé"
-        }
-    }
-},
-"put": {
-    "tags": [
-      "Team"
-    ],
-    "security": [
-        {
-              "JWT": []
-         }
-            ],
-    "summary": "Mettre à jour une équipe existante",
-    "parameters": [
-      {
-          "name": "id_team",
-          "in": "path",
-          "description": "id de l'équipe",
-          "required": true,
-          "schema": {
-              "type": "integer"
-          }
-      }
-  ],
-  "requestBody":{
-      "content": {
-          "application/json": {
-              "schema": {
-                  "type": "array",
-                  "items": {
-                      "$ref": "#/components/schemas/Team"
-                  }
-              }
-          }
-        }
-  },
-    "responses": {
-      "200": {
-          "description": "équipe modifié avec succés",
-          "content": {
-              "application/json": {
-                  "schema": {
-                      "type": "array",
-                      "items": {
-                          "$ref": "#/components/schemas/Team"
-                      }
-                  }
-              }
-          }
-      },
-      "400": {
-          "description": "Invalid ID_team"
-        },
-      "404": {
-        "description": "équipe non trouvé"
-      },
-      "405": {
-        "description": "Permission non accordée"
-      }
-    }
-      
-  },
-"delete": {
-    "tags": [
-        "Team"
-      ],
-      "security": [
-        {
-              "JWT": []
-         }
-            ],
-    "summary": "Suppression d'une équipe",
-    "parameters": [
-        {
-            "name": "id_team",
-            "in": "path",
-            "description": "id de l'équipe",
-            "required": true,
-            "schema": {
-                "type": "integer"
-            }
-        }
-    ],
-    "responses": {
-        "200": {
-            "description": "l'équipe a été supprimé",
-            "content": {
-                "application/json": {
-                    "schema": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Team"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Team"
+                                }
+                            }
                         }
                     }
+                },
+                "responses": {
+                    "200": {
+                        "description": "équipe modifié avec succés",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Team"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid ID_team"
+                    },
+                    "404": {
+                        "description": "équipe non trouvé"
+                    },
+                    "405": {
+                        "description": "Permission non accordée"
+                    }
                 }
-            }
-        },
-        "400":{
-            "description": "Invalid id_team"
-        },
-        "404":{
-            "description": "équipe non trouvé"
-        },
-        "405": {
-            "description": "Permission non accordée"
-          }
-    }
-}
-},
-
-"/login":{
-  "post": {
-    "description": "Retourne le jeton de l'utilisateur autorisé",
-    "tags": [
-      "User"
-    ],
-    "operationId": "Login",
-    "consumes": [
-      "application/json"
-    ],
-    "summary": "authentifie un utilisateur et renvoie un token",
-    "requestBody":{
-        "content": {
-            "application/json": {
-                "schema": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/components/schemas/LoginInfo"
+            },
+            "delete": {
+                "tags": [
+                    "Team"
+                ],
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "summary": "Suppression d'une équipe",
+                "parameters": [
+                    {
+                        "name": "id_team",
+                        "in": "path",
+                        "description": "id de l'équipe",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "l'équipe a été supprimé",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Team"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid id_team"
+                    },
+                    "404": {
+                        "description": "équipe non trouvé"
+                    },
+                    "405": {
+                        "description": "Permission non accordée"
                     }
                 }
             }
-          }
-    },
-    "responses": {
-      "200": {
-        "description": "Connexion réussie",
-        "schema": {
-          "$ref": "#/definitions/LoginSuccess"
-        }
-      },
-    "400":{
-        "description": "entrées invalides"
-    },
-      "500": {
-        "schema": {
-          "type": "string"
         },
-        "description": "erreur serveur"
-      }
-    }
-  }
-
-}
-
+        "/login": {
+            "post": {
+                "description": "Retourne le jeton de l'utilisateur autorisé",
+                "tags": [
+                    "User"
+                ],
+                "operationId": "Login",
+                "consumes": [
+                    "application/json"
+                ],
+                "summary": "authentifie un utilisateur et renvoie un token",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/LoginInfo"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Connexion réussie",
+                        "schema": {
+                            "$ref": "#/definitions/LoginSuccess"
+                        }
+                    },
+                    "400": {
+                        "description": "entrées invalides"
+                    },
+                    "500": {
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "erreur serveur"
+                    }
+                }
+            }
+        }
     },
     "definitions": {
-      "LoginSuccess": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean"
-          },
-          "token": {
-            "type": "string"
-          }
+        "LoginSuccess": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                },
+                "token": {
+                    "type": "string"
+                }
+            }
         }
-      }
-
     },
-
-    "components":{
+    "components": {
         "securitySchemes": {
             "JWT": {
                 "type": "apiKey",
@@ -1051,143 +1086,166 @@
                 "scheme": "JWT"
             }
         },
-        "schemas":{
-          "Comment":{
-            "type": "object",
-            "properties":{
-              "id_comment":{
-                "type": "integer"
-              },
-              "comment_content":{
-                "type": "string"
-              },
-              "id_user":{
-                "type": "integer"
-              }
+        "schemas": {
+            "Comment": {
+                "type": "object",
+                "properties": {
+                    "id_comment": {
+                        "type": "integer"
+                    },
+                    "comment_content": {
+                        "type": "string"
+                    },
+                    "id_user": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "LoginInfo": {
+                "type": "object",
+                "required": [
+                    "email",
+                    "password"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "id_user": {
+                        "type": "integer"
+                    },
+                    "first_name": {
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "type": "string"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "password"
+                    },
+                    "telephone": {
+                        "type": "string"
+                    },
+                    "id_team": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "Resource": {
+                "type": "object",
+                "properties": {
+                    "id_resource": {
+                        "type": "integer"
+                    },
+                    "internet_volume": {
+                        "type": "string"
+                    },
+                    "number_of_tablets_used": {
+                        "type": "string"
+                    },
+                    "id_report": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Team": {
+                "type": "object",
+                "properties": {
+                    "id_team": {
+                        "type": "integer"
+                    },
+                    "team_name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "district": {
+                "type": "object",
+                "properties": {
+                    "id_district": {
+                        "type": "integer"
+                    },
+                    "region": {
+                        "type": "string"
+                    },
+                    "code_region": {
+                        "type": "string"
+                    },
+                    "code_district": {
+                        "type": "string"
+                    },
+                    "longitude": {
+                        "type": "string"
+                    },
+                    "latitude": {
+                        "type": "string"
+                    },
+                    "district_sanitaire": {
+                        "type": "string"
+                    }
+                }
+            },
+            "report": {
+                "type": "object",
+                "properties": {
+                    "id_report": {
+                        "type": "integer"
+                    },
+                    "MCD_name": {
+                        "type": "string"
+                    },
+                    "MCD_tel": {
+                        "type": "string"
+                    },
+                    "allocated_range": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "starting_time": {
+                        "type": "string"
+                    },
+                    "ending_time": {
+                        "type": "string"
+                    },
+                    "comment": {
+                        "type": "string"
+                    },
+                    "used_range": {
+                        "type": "string"
+                    },
+                    "received_sample": {
+                        "type": "integer"
+                    },
+                    "tested_sample": {
+                        "type": "integer"
+                    },
+                    "non_conforming_sample": {
+                        "type": "integer"
+                    },
+                    "id_user": {
+                        "type": "integer"
+                    },
+                    "id_centroid": {
+                        "type": "integer"
+                    }
+                }
             }
-          },
-
-          "LoginInfo": {
-            "type": "object",
-            "required": [
-              "email",
-              "password"
-            ],
-            "properties": {
-              "email": {
-                "type": "string"
-              },
-              "password": {
-                "type": "string"
-              }
-            }
-          },
-
-          "User":{
-            "type": "object",
-            "properties":{
-              "id_user":{
-                "type": "integer"
-              },
-              "first_name":{
-                "type": "string"
-              },
-              "last_name":{
-                "type": "string"
-              },
-              "email":{
-                "type": "string",
-                "format": "email"
-              },
-              "password":{
-                "type": "string",
-                "format": "password"
-              },
-              "telephone":{
-                "type": "string"
-              },
-              "id_team":{
-                "type": "integer"
-              }
-            }
-          },
-          "Resource":{
-            "type": "object",
-            "properties":{
-              "id_resource":{
-                "type": "integer"
-              },
-              "internet_volume":{
-                "type": "string"
-              },
-              "number_of_tablets_used":{
-                "type": "string"
-              },
-              "id_district_data":{
-                "type": "string"
-              }
-            }
-          },
-          "Team":{
-            "type": "object",
-            "properties":{
-              "id_team":{
-                "type": "integer"
-              },
-              "team_name":{
-                "type": "string"
-              }
-            }
-          },
-
-          "District_data":{
-            "type": "object",
-            "properties":{
-              "id_district_data":{
-                "type": "integer"
-              },
-              "MCD_name":{
-                "type": "string"
-              },
-              "MCD_tel":{
-                "type": "string"
-              },
-              "allocated_range":{
-                "type": "string"
-              },
-              "date":{
-                "type": "string",
-                "format":"date"
-              },
-              "starting_time":{
-                "type": "string"
-              },
-              "ending_time":{
-                "type": "string"
-              },
-              "comment":{
-                "type": "string"
-              },
-              "used_range":{
-                "type": "string"
-              },
-              "received_sample":{
-                "type": "integer"
-              },
-              "tested_sample":{
-                "type": "integer"
-              },
-              "non_conforming_sample":{
-                "type": "integer"
-              },
-              "id_user":{
-                "type": "integer"
-              },
-              "id_centroid":{
-                "type": "integer"
-              }
-            }
-          }
         }
-      }
+    }
 }
