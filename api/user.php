@@ -62,15 +62,18 @@ function addUser($data)
                 "first_name" => $data["first_name"],
                 "email" => $data["email"],
                 "password" => $data["password"],
-                "id_team" => $id_team
+                "id_team" => $id_team,
+                'telephone' => $data["telephone"]
             ];
             try {
-                $stmt = $db->prepare("INSERT INTO user(first_name,last_name,email,password,id_team) VALUES(:first_name,:last_name,:email,:password,:id_team)");
+                $stmt = $db->prepare("INSERT INTO user(first_name,last_name,email,password,telephone,id_team) VALUES(:first_name,:last_name,:email,:password,:telephone,:id_team)");
                 $stmt->bindValue(':first_name', $user->first_name, PDO::PARAM_STR);
                 $stmt->bindValue(':last_name', $user->last_name, PDO::PARAM_STR);
                 $stmt->bindValue(':email', $user->email, PDO::PARAM_STR);
                 $stmt->bindValue(':password', password_hash($user->password, PASSWORD_DEFAULT), PDO::PARAM_STR);
                 $stmt->bindValue(':id_team', $user->id_team, PDO::PARAM_INT);
+                $stmt->bindValue(':telephone', $user->telephone, PDO::PARAM_STR);
+
                 $stmt->execute();
                 http_response_code(201);
                 //récupérer l'objet dans la BD

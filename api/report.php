@@ -7,8 +7,8 @@ use \Firebase\JWT\JWT;
 
 global $decoded_data;
 $headers = apache_request_headers();
-if (array_key_exists("Authorization", $headers)) {
-    $token = $headers["Authorization"];
+if (array_key_exists("authorization", $headers)) {
+    $token = $headers["authorization"];
     try {
         $decoded_data = JWT::decode($token, GIS_KEY, array("HS512"));
         $decoded_data = json_decode(json_encode($decoded_data));
@@ -31,21 +31,10 @@ function addReport($data)
 {
     $missing_fields = [];
     if (
-        isset($data["id_user"]) && isset($data["district"]) && isset($data["date"])  && isset($data["starting_time"])
+        isset($data["id_user"]) && isset($data["id_district"]) && isset($data["date"])  && isset($data["starting_time"])
         && isset($data["ending_time"]) && isset($data["starting_range"]) && isset($data["ending_range"])
     ) {
-        //TODO récupérer l'id_district à partir du district
-        $database = new Database();
-        $db = $database->getConnexion();
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $st = $db->prepare("SELECT * FROM centroids79districts WHERE code_district=:code_district");
-        $st->execute([
-            "code_district" => $data["district"]
-        ]);
-        if ($st->rowCount() > 0) {
-            $district = $st->fetch(PDO::FETCH_ASSOC);
-            $id_district = $district["id_district"];
-        }
+
 
         $comment = "";
         $starting_time = "";
@@ -83,7 +72,7 @@ function addReport($data)
             $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $st = $db->prepare("SELECT * FROM centroids79districts WHERE id_district=:id_district");
             $st->execute([
-                "id_district" => $data["id_centroid"]
+                "id_district" => $data["id_district"]
             ]);
             if ($st->rowCount() == 0) {
                 http_response_code(400);
@@ -97,7 +86,7 @@ function addReport($data)
             "ending_time" => $ending_time,
             "comment" => $comment,
             "id_user" => $data["id_user"],
-            "id_centroid" => $id_district,
+            "id_centroid" => $data["id_district"],
             "date" => $date
         ];
         try {

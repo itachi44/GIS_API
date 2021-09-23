@@ -7,8 +7,8 @@ use \Firebase\JWT\JWT;
 
 global $decoded_data;
 $headers = apache_request_headers();
-if (array_key_exists("Authorization", $headers)) {
-    $token = $headers["Authorization"];
+if (array_key_exists("authorization", $headers)) {
+    $token = $headers["authorization"];
     try {
         $decoded_data = JWT::decode($token, GIS_KEY, array("HS512"));
         $decoded_data = json_decode(json_encode($decoded_data));
