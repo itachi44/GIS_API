@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : jeu. 23 sep. 2021 à 12:10
+-- Généré le : jeu. 30 sep. 2021 à 14:13
 -- Version du serveur :  5.7.30
 -- Version de PHP : 7.4.9
 SET
@@ -774,13 +774,6 @@ VALUES
     `comment_content` text NOT NULL,
     `id_user` int(11) NOT NULL
   ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
---
-  -- Déchargement des données de la table `comment`
-  --
-INSERT INTO
-  `comment` (`id_comment`, `comment_content`, `id_user`)
-VALUES
-  (3, 'string', 3);
 -- --------------------------------------------------------
   --
   -- Structure de la table `district_data`
@@ -821,49 +814,19 @@ INSERT INTO
   )
 VALUES
   (
-    3,
-    'string',
-    '2021-09-12',
-    '11:00:00',
-    '18:00:00',
-    'string',
-    'string',
-    0,
-    0,
-    1000,
-    3,
-    '2021-09-12 12:09:17',
-    10
-  ),
-  (
-    4,
-    'string',
-    '2021-09-12',
-    '11:00:00',
-    '18:00:00',
-    'string',
-    'string',
-    0,
-    0,
-    0,
-    3,
-    '2021-09-12 12:11:24',
-    1
-  ),
-  (
-    5,
-    'string',
-    '2021-09-12',
-    '11:00:00',
-    '18:00:00',
-    'string',
-    'string',
-    0,
-    0,
-    0,
-    3,
-    '2021-09-12 16:04:18',
-    10
+    12,
+    '000:999',
+    '2021-09-30',
+    '10:11:00',
+    '00:11:00',
+    'commentaire',
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    1,
+    '2021-09-30 10:11:37',
+    2
   );
 -- --------------------------------------------------------
   --
@@ -889,9 +852,9 @@ VALUES
 INSERT INTO
   `Marked_inProgress` (`latitude`, `longitude`, `district`)
 VALUES
-  ('14.6492', '-16.8726', 'THIES'),
   ('14.7303', '-17.4832', 'DAKAR-OUEST'),
-  ('14.7101', '-17.1722', 'DIAMNIADIO');
+  ('14.7101', '-17.1722', 'DIAMNIADIO'),
+  ('14.6492', '-16.8726', 'THIES');
 -- --------------------------------------------------------
   --
   -- Structure de la table `mcd`
@@ -975,6 +938,15 @@ VALUES
     'Bamba',
     'bamba@pasteur.sn',
     '$2y$10$o/JiAM.gXIfZDASTWavcI.SYSCANeCg4PUBHXYsiM67FxzNMm736y',
+    '771234567',
+    1
+  ),
+  (
+    5,
+    'test',
+    'test',
+    'test@pasteur.sn',
+    '$2y$10$an8fzHHHy0WslU4acqlRzuSU7bUaB7Rs7SnjHW9aSKjIfElIP.lSu',
     '771234567',
     1
   );
@@ -1073,7 +1045,7 @@ ALTER TABLE
   `comment`
 MODIFY
   `id_comment` int(11) NOT NULL AUTO_INCREMENT,
-  AUTO_INCREMENT = 4;
+  AUTO_INCREMENT = 5;
 --
   -- AUTO_INCREMENT pour la table `district_data`
   --
@@ -1081,7 +1053,7 @@ ALTER TABLE
   `district_data`
 MODIFY
   `id_district_data` int(11) NOT NULL AUTO_INCREMENT,
-  AUTO_INCREMENT = 6;
+  AUTO_INCREMENT = 16;
 --
   -- AUTO_INCREMENT pour la table `mcd`
   --
@@ -1112,4 +1084,4 @@ ALTER TABLE
   `user`
 MODIFY
   `id_user` int(11) NOT NULL AUTO_INCREMENT,
-  AUTO_INCREMENT = 2;
+  AUTO_INCREMENT = 6;
