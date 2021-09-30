@@ -121,16 +121,32 @@ switch ($request_method) {
             $stmt->execute(["email" => $decoded_data->email]);
             if ($stmt->rowCount() > 0) {
                 if (empty($_GET["id_district_data"])) {
-                    $stmt = $db->prepare("SELECT * FROM district_data");
-                    $stmt->execute();
-                    if ($stmt->rowCount() > 0) {
-                        $reports = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                        http_response_code(200);
-                        echo json_encode(array("response" => $reports), JSON_PRETTY_PRINT);
+                    if (isset($_GET["how"])) {
+                        if ($_GET["how"] == "daily") {
+                            $stmt = $db->prepare("SELECT * FROM district_data WHERE date_envoie<= NOW() AND date_envoie>=TO_DAYS(NOW()-'1')");
+                            $stmt->execute();
+                            if ($stmt->rowCount() > 0) {
+                                $reports = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                http_response_code(200);
+                                echo json_encode(array("response" => $reports), JSON_PRETTY_PRINT);
+                            } else {
+                                http_response_code(404);
+                                echo json_encode(array("response" => "pas de donnees"));
+                                exit(1);
+                            }
+                        }
                     } else {
-                        http_response_code(404);
-                        echo json_encode(array("response" => "pas de donnees"));
-                        exit(1);
+                        $stmt = $db->prepare("SELECT * FROM district_data");
+                        $stmt->execute();
+                        if ($stmt->rowCount() > 0) {
+                            $reports = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                            http_response_code(200);
+                            echo json_encode(array("response" => $reports), JSON_PRETTY_PRINT);
+                        } else {
+                            http_response_code(404);
+                            echo json_encode(array("response" => "pas de donnees"));
+                            exit(1);
+                        }
                     }
                 } else {
                     $id_district_data = $_GET["id_district_data"];
