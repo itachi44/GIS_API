@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : mer. 22 sep. 2021 à 11:34
+-- Généré le : jeu. 23 sep. 2021 à 12:10
 -- Version du serveur :  5.7.30
 -- Version de PHP : 7.4.9
 SET
@@ -787,17 +787,15 @@ VALUES
   --
   CREATE TABLE `district_data` (
     `id_district_data` int(11) NOT NULL,
-    `MCD_name` varchar(100) NOT NULL,
-    `MCD_tel` varchar(20) NOT NULL,
     `allocated_range` varchar(100) NOT NULL,
     `date` date NOT NULL,
     `starting_time` time NOT NULL,
     `ending_time` time NOT NULL,
     `comment` text NOT NULL,
-    `used_range` varchar(100) NOT NULL,
-    `received_sample` int(11) NOT NULL,
-    `tested_sample` int(11) NOT NULL,
-    `non_conforming_sample` int(11) NOT NULL,
+    `used_range` varchar(100) DEFAULT NULL,
+    `received_sample` int(11) DEFAULT NULL,
+    `tested_sample` int(11) DEFAULT NULL,
+    `non_conforming_sample` int(11) DEFAULT NULL,
     `id_user` int(11) NOT NULL,
     `date_envoie` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `id_centroid` int(11) NOT NULL
@@ -808,8 +806,6 @@ VALUES
 INSERT INTO
   `district_data` (
     `id_district_data`,
-    `MCD_name`,
-    `MCD_tel`,
     `allocated_range`,
     `date`,
     `starting_time`,
@@ -826,8 +822,6 @@ INSERT INTO
 VALUES
   (
     3,
-    'stringdhuduisuududu',
-    'string',
     'string',
     '2021-09-12',
     '11:00:00',
@@ -844,8 +838,6 @@ VALUES
   (
     4,
     'string',
-    'string',
-    'string',
     '2021-09-12',
     '11:00:00',
     '18:00:00',
@@ -860,8 +852,6 @@ VALUES
   ),
   (
     5,
-    'string',
-    'string',
     'string',
     '2021-09-12',
     '11:00:00',
@@ -902,6 +892,19 @@ VALUES
   ('14.6492', '-16.8726', 'THIES'),
   ('14.7303', '-17.4832', 'DAKAR-OUEST'),
   ('14.7101', '-17.1722', 'DIAMNIADIO');
+-- --------------------------------------------------------
+  --
+  -- Structure de la table `mcd`
+  --
+  CREATE TABLE `mcd` (
+    `id_mcd` int(11) NOT NULL,
+    `nom_mcd` varchar(100) NOT NULL,
+    `tel_mcd` varchar(20) NOT NULL,
+    `mobile_mcd` varchar(20) NOT NULL,
+    `fax_mcd` varchar(25) NOT NULL,
+    `email_mcd` varchar(100) NOT NULL,
+    `id_district` int(11) NOT NULL
+  ) ENGINE = InnoDB DEFAULT CHARSET = utf8;
 -- --------------------------------------------------------
   --
   -- Structure de la table `resource`
@@ -967,30 +970,12 @@ INSERT INTO
   )
 VALUES
   (
-    6,
-    'diop',
-    'bamba',
+    1,
+    'Diop',
+    'Bamba',
     'bamba@pasteur.sn',
-    '$2y$10$K7XYz8S1NZ1/MoEC.rQgzu0wyiRhJ9WTIlgDG9y6NMcym/dCjrhgO',
-    '0000000',
-    1
-  ),
-  (
-    15,
-    'test',
-    'test',
-    'test@pasteur.sn',
-    '$2y$10$HJ6utkcEV2FYWVhP79L/aOtMvyHKiBD.ltyH8ttZ3udwXjmCYzzvu',
-    '0000000',
-    1
-  ),
-  (
-    16,
-    'test',
-    'test',
-    'test1@pasteur.sn',
-    '$2y$10$P.1jOasnsUXE9NTeIM89DeXlcQIivAAa6y5W/xIZmWQRSLHxxh586',
-    '0000000',
+    '$2y$10$o/JiAM.gXIfZDASTWavcI.SYSCANeCg4PUBHXYsiM67FxzNMm736y',
+    '771234567',
     1
   );
 --
@@ -1030,6 +1015,13 @@ ADD
   KEY `centroid_district_fk` (`id_centroid`),
 ADD
   KEY `user_data_fk` (`id_user`);
+--
+  -- Index pour la table `mcd`
+  --
+ALTER TABLE
+  `mcd`
+ADD
+  PRIMARY KEY (`id_mcd`);
 --
   -- Index pour la table `resource`
   --
@@ -1091,6 +1083,13 @@ MODIFY
   `id_district_data` int(11) NOT NULL AUTO_INCREMENT,
   AUTO_INCREMENT = 6;
 --
+  -- AUTO_INCREMENT pour la table `mcd`
+  --
+ALTER TABLE
+  `mcd`
+MODIFY
+  `id_mcd` int(11) NOT NULL AUTO_INCREMENT;
+--
   -- AUTO_INCREMENT pour la table `resource`
   --
 ALTER TABLE
@@ -1113,4 +1112,4 @@ ALTER TABLE
   `user`
 MODIFY
   `id_user` int(11) NOT NULL AUTO_INCREMENT,
-  AUTO_INCREMENT = 17;
+  AUTO_INCREMENT = 2;
