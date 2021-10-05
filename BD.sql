@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost:8889
--- Généré le : jeu. 30 sep. 2021 à 14:13
+-- Généré le : mar. 05 oct. 2021 à 11:17
 -- Version du serveur :  5.7.30
 -- Version de PHP : 7.4.9
 SET
@@ -814,18 +814,33 @@ INSERT INTO
   )
 VALUES
   (
-    12,
-    '000:999',
-    '2021-09-30',
-    '10:11:00',
-    '00:11:00',
-    'commentaire',
+    15,
+    '00-99999',
+    '2021-10-02',
+    '12:49:00',
+    '13:49:00',
+    'report 1',
     NULL,
     NULL,
     NULL,
     NULL,
     1,
-    '2021-09-30 10:11:37',
+    '2021-10-02 12:50:02',
+    2
+  ),
+  (
+    17,
+    '11-1222',
+    '2021-10-02',
+    '15:21:00',
+    '15:21:00',
+    'rapport 2 updated',
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    1,
+    '2021-10-02 15:21:14',
     2
   );
 -- --------------------------------------------------------
@@ -949,6 +964,15 @@ VALUES
     '$2y$10$an8fzHHHy0WslU4acqlRzuSU7bUaB7Rs7SnjHW9aSKjIfElIP.lSu',
     '771234567',
     1
+  ),
+  (
+    6,
+    'Ngom',
+    'Farimata',
+    'fari@pasteur.sn',
+    '$2y$10$FFhVXD7oDZx1Hk4URaG/fuA6Yohy1N306xI8r5tfZVYQhaC5USjnu',
+    '771234567',
+    1
   );
 --
   -- Index pour les tables déchargées
@@ -1044,8 +1068,7 @@ MODIFY
 ALTER TABLE
   `comment`
 MODIFY
-  `id_comment` int(11) NOT NULL AUTO_INCREMENT,
-  AUTO_INCREMENT = 5;
+  `id_comment` int(11) NOT NULL AUTO_INCREMENT;
 --
   -- AUTO_INCREMENT pour la table `district_data`
   --
@@ -1053,7 +1076,7 @@ ALTER TABLE
   `district_data`
 MODIFY
   `id_district_data` int(11) NOT NULL AUTO_INCREMENT,
-  AUTO_INCREMENT = 16;
+  AUTO_INCREMENT = 18;
 --
   -- AUTO_INCREMENT pour la table `mcd`
   --
@@ -1084,4 +1107,4 @@ ALTER TABLE
   `user`
 MODIFY
   `id_user` int(11) NOT NULL AUTO_INCREMENT,
-  AUTO_INCREMENT = 6;
+  AUTO_INCREMENT = 7;

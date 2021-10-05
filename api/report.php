@@ -7,8 +7,12 @@ use \Firebase\JWT\JWT;
 
 global $decoded_data;
 $headers = apache_request_headers();
-if (array_key_exists("authorization", $headers)) {
-    $token = $headers["authorization"];
+if (array_key_exists("Authorization", $headers) || array_key_exists("authorization", $headers)) {
+    if (array_key_exists("Authorization", $headers)) {
+        $token = $headers["Authorization"];
+    } else if (array_key_exists("authorization", $headers)) {
+        $token = $headers["authorization"];
+    }
     try {
         $decoded_data = JWT::decode($token, GIS_KEY, array("HS512"));
         $decoded_data = json_decode(json_encode($decoded_data));
@@ -34,7 +38,6 @@ function addReport($data)
         isset($data["id_user"]) && isset($data["id_district"]) && isset($data["date"])  && isset($data["starting_time"])
         && isset($data["ending_time"]) && isset($data["starting_range"]) && isset($data["ending_range"])
     ) {
-
 
         $comment = "";
         $starting_time = "";
@@ -81,7 +84,7 @@ function addReport($data)
             }
         }
         $context = [
-            "allocated_range" => $data["starting_range"] . ":" . $data["ending_range"],
+            "allocated_range" => $data["starting_range"] . "-" . $data["ending_range"],
             "starting_time" => $starting_time,
             "ending_time" => $ending_time,
             "comment" => $comment,
@@ -120,10 +123,10 @@ switch ($request_method) {
             $stmt = $db->prepare("SELECT * FROM user WHERE email=:email");
             $stmt->execute(["email" => $decoded_data->email]);
             if ($stmt->rowCount() > 0) {
-                if (empty($_GET["id_district_data"])) {
+                if (empty($_GET["id_report"])) {
                     if (isset($_GET["how"])) {
                         if ($_GET["how"] == "daily") {
-                            $stmt = $db->prepare("SELECT * FROM district_data WHERE date_envoie<= NOW() AND date_envoie>=TO_DAYS(NOW()-'1')");
+                            $stmt = $db->prepare("SELECT * FROM district_data WHERE date_envoie<= NOW() AND date_envoie>=TO_DAYS(NOW()-'1') ORDER BY date_envoie DESC LIMIT 6");
                             $stmt->execute();
                             if ($stmt->rowCount() > 0) {
                                 $reports = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -149,7 +152,7 @@ switch ($request_method) {
                         }
                     }
                 } else {
-                    $id_district_data = $_GET["id_district_data"];
+                    $id_district_data = $_GET["id_report"];
                     $stmt = $db->prepare("SELECT * FROM district_data WHERE id_district_data=:id_district_data");
                     $stmt->execute(
                         ["id_district_data" => $id_district_data]
@@ -197,7 +200,7 @@ switch ($request_method) {
             $stmt = $db->prepare("SELECT * FROM user WHERE email=:email");
             $stmt->execute(["email" => $decoded_data->email]);
             if ($stmt->rowCount() > 0) {
-                if (isset($_GET["id_district_data"]) && !empty($_GET["id_district_data"])) {
+                if (isset($_GET["id_report"]) && !empty($_GET["id_report"])) {
                     //récupération des données
                     if (json_decode(file_get_contents("php://input"))) {
                         $data = json_decode(file_get_contents("php://input"), True);
@@ -209,7 +212,7 @@ switch ($request_method) {
                     }
 
                     if (!empty($data)) {
-                        $id_district_data = $_GET["id_district_data"];
+                        $id_district_data = $_GET["id_report"];
                         if (!empty($data["id_user"])) {
                             $database = new Database();
                             $db = $database->getConnexion();
@@ -256,7 +259,6 @@ switch ($request_method) {
                             echo json_encode(["response" => "ce rapport n'existe pas"]);
                             exit(1);
                         }
-
 
 
                         //mise à jour
@@ -311,8 +313,8 @@ switch ($request_method) {
             $stmt = $db->prepare("SELECT * FROM user WHERE email=:email");
             $stmt->execute(["email" => $decoded_data->email]);
             if ($stmt->rowCount() > 0) {
-                if (isset($_GET["id_district_data"]) && !empty($_GET["id_district_data"])) {
-                    $id_report = $_GET["id_district_data"];
+                if (isset($_GET["id_report"]) && !empty($_GET["id_report"])) {
+                    $id_report = $_GET["id_report"];
 
                     $stmt = $db->prepare("DELETE FROM district_data WHERE id_district_data=:id_report");
                     $stmt->bindValue(':id_report', $id_report, PDO::PARAM_INT);

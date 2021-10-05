@@ -7,8 +7,12 @@ use \Firebase\JWT\JWT;
 
 global $decoded_data;
 $headers = apache_request_headers();
-if (array_key_exists("Authorization", $headers)) {
-    $token = $headers["Authorization"];
+if (array_key_exists("Authorization", $headers) || array_key_exists("authorization", $headers)) {
+    if (array_key_exists("Authorization", $headers)) {
+        $token = $headers["Authorization"];
+    } else if (array_key_exists("authorization", $headers)) {
+        $token = $headers["authorization"];
+    }
     try {
         $decoded_data = JWT::decode($token, GIS_KEY, array("HS512"));
         $decoded_data = json_decode(json_encode($decoded_data));
@@ -106,6 +110,7 @@ switch ($request_method) {
     case 'GET':
         $database = new Database();
         $db = $database->getConnexion();
+
         if ($decoded_data->email) {
             $stmt = $db->prepare("SELECT * FROM user WHERE email=:email");
             $stmt->execute(["email" => $decoded_data->email]);
@@ -199,7 +204,6 @@ switch ($request_method) {
                             }
                         }
                         $id_user = $_GET["id_user"];
-
                         $cleaned_data = [];
                         foreach ($data as $key => $value) {
                             $cleaned_data[$key] = htmlspecialchars($value);
@@ -221,6 +225,8 @@ switch ($request_method) {
 
 
                         //mise à jour
+                        //TODO s'il y'a le champ mdp : le chiffrer
+                        //TODO s'il y'a le champ team, récupérer le l'id grace au nom
                         $keys = array_keys($cleaned_data);
                         $fields_values = array_values($cleaned_data);
                         $keys_str = [];
