@@ -225,12 +225,16 @@ switch ($request_method) {
 
 
                         //mise à jour
-                        //TODO s'il y'a le champ mdp : le chiffrer
-                        //TODO s'il y'a le champ team, récupérer le l'id grace au nom
+
                         $keys = array_keys($cleaned_data);
                         $fields_values = array_values($cleaned_data);
                         $keys_str = [];
+                        $index_pwd;
                         foreach ($keys as $i => $key) {
+                            if ($key == "password") {
+                                $index_pwd = $i;
+                                $key = "password";
+                            }
                             if ($i + 1 != count($keys)) {
                                 $key = $key . "=:" . $key . ",";
                                 array_push($keys_str, $key);
@@ -239,14 +243,20 @@ switch ($request_method) {
                                 array_push($keys_str, $key);
                             }
                         }
+
                         $fields = implode("", $keys_str);
                         $stmt = $db->prepare("UPDATE user SET " . $fields . " WHERE id_user = :id_user");
                         foreach ($fields_values as $i => $value) {
-                            $stmt->bindValue(':' . $keys[$i], $value, PDO::PARAM_STR);
+                            if ($keys[$i] == "password") {
+                                $value = password_hash($user->password, PASSWORD_DEFAULT);
+                                $stmt->bindValue(':' . $keys[$i], $value, PDO::PARAM_STR);
+                            } else {
+                                $stmt->bindValue(':' . $keys[$i], $value, PDO::PARAM_STR);
+                            }
                         }
                         $stmt->bindValue(':id_user', $id_user, PDO::PARAM_INT);
                         $stmt->execute();
-                        http_response_code(201);
+                        http_response_code(200);
                         echo json_encode(array("response" => "mise à jour effectuée avec succès."));
                     } else {
                         http_response_code(400);

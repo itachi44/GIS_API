@@ -83,6 +83,18 @@ switch ($request_method) {
                         echo json_encode(array("response" => "pas de donnees"));
                         exit(1);
                     }
+                } else if (isset($_GET["team_name"])) {
+                    $stmt = $db->prepare("SELECT * FROM team WHERE team_name=:team");
+                    $stmt->execute(["team" => strtolower($_GET["team_name"])]);
+                    if ($stmt->rowCount() > 0) {
+                        $team = $stmt->fetch(PDO::FETCH_ASSOC);
+                        http_response_code(200);
+                        echo json_encode(array("response" => $team), JSON_PRETTY_PRINT);
+                    } else {
+                        http_response_code(404);
+                        echo json_encode(array("response" => "pas d'équipe de ce nom!"));
+                        exit(1);
+                    }
                 } else {
                     $id_team = $_GET["id_team"];
                     $stmt = $db->prepare("SELECT * FROM team WHERE id_team=:id_team");
