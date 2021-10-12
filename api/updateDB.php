@@ -20,7 +20,10 @@ function curl_get_contents($url)
 $database = new Database();
 $db = $database->getConnexion();
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+//nettoyage de la table
 
+$stmt = $db->prepare("DELETE from resource");
+$stmt->execute();
 
 //récupérer la liste des codes districts 
 
