@@ -9,6 +9,9 @@
     <link rel="stylesheet" type="text/css" href="leaflet/leaflet.css" />
     <link rel="stylesheet" type="text/css" href="main.css" />
     <link rel="shortcut icon" type="image" href="icon/favicon.jpeg" />
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" />
+
     <script type="text/javascript" src="leaflet/leaflet.js"></script>
     <script type="text/javascript" src="jquery.min.js"></script>
     <title>GIS Suivi du déploiement</title>
@@ -38,16 +41,150 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        ...
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6 mb-4">
+                                    <div class="card border-left-primary shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                        MCD infos:</div>
+                                                    <div class="h6 mb-0 font-weight-bold text-gray-800">info1 :</div>
+                                                    <div class="h6 mb-0 font-weight-bold text-gray-800">info2 :</div>
+                                                    <div class="h6 mb-0 font-weight-bold text-gray-800">info3 :</div>
+                                                    <div class="h6 mb-0 font-weight-bold text-gray-800">...</div>
+
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i style="opacity: 0.5;" class="fas fa-user-md fa-2x text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 mb-4">
+                                    <div class="card border-left-primary shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                        Infos rapports:</div>
+                                                    <div class="h6 mb-0 font-weight-bold text-gray-800">info1 :</div>
+                                                    <div class="h6 mb-0 font-weight-bold text-gray-800">info2 :</div>
+                                                    <div class="h6 mb-0 font-weight-bold text-gray-800">info3 :</div>
+                                                    <div class="h6 mb-0 font-weight-bold text-gray-800">...</div>
+
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i style="opacity: 0.5;" class="fas fa-calendar fa-2x text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xl-6 col-md-6 mb-4">
+                                    <div class="card border-left-primary shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                        Equipe:</div>
+                                                    <div class="h6 mb-0 font-weight-bold text-gray-800">info1 :</div>
+                                                    <div class="h6 mb-0 font-weight-bold text-gray-800">info2 :</div>
+                                                    <div class="h6 mb-0 font-weight-bold text-gray-800">info3 :</div>
+                                                    <div class="h6 mb-0 font-weight-bold text-gray-800">...</div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i style="opacity: 0.5;" class="fas fa-users fa-2x text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-6 col-md-6 mb-4">
+                                    <div class="card border-left-primary shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                        Autres infos:</div>
+
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i style="opacity: 0.5;" class="fas fa-info-circle fa-2x text-gray-300"></i>
+                                                </div>
+                                                <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                                    <p style="overflow-y: scroll; height:100px;" class="fst-normal">Text here
+                                                    </p>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display:flex; justify-content:center; align-items:center;" class="row">
+                                <div class="col-xl-8 col-lg-8">
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Commentaires</h6>
+                                            <i class="fal fa-comment-dots"></i>
+
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body">
+                                            <div class="chart-area">
+                                                <p style="overflow-y: scroll; height:150px;" class="fst-normal">Text with normal font style Text with normal font style Text with normal font style
+                                                    Text with normal font style Text with normal font style
+                                                    Text with normal font styleText with normal font styleText with normal font style Text with normal font style Text with normal font style
+                                                    Text with normal font style Text with normal font style Text with normal font style Text with normal font style Text with normal font style Text with normal font style
+                                                    Text with normal font style Text with normal font style Text with normal font style
+                                                    Text with normal font style Text with normal font style Text with normal font style
+                                                    Text with normal font style Text with normal font style Text with normal font style
+                                                    Text with normal font style Text with normal font style Text with normal font style
+                                                    Text with normal font style Text with normal font style Text with normal font style
+                                                </p>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Do something</button>
+                        <button id="seeAllBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#seeAll">Voir tout</button>
+
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                     </div>
                 </div>
             </div>
         </div>
         <!--Modal-END-->
+
+        <!--SeeAll modal -->
+        <div class="modal fade" id="seeAll" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Toutes les informations district</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table id="dataTable" class="display" width="100%"></table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <nav class="navbar navbar-expand-lg mb-0 navbar-light bg-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#"><img width="100" height="50" alt="" class="d-inline-block align-middle mr-2" src="./icon/logo_ipd6.png" style='border-radius:10%;'></a>
@@ -180,7 +317,7 @@
         background.addTo(map);
 
 
-        function changeBackgroundTo(link){
+        function changeBackgroundTo(link) {
             map.removeLayer(background);
             background = L.tileLayer(link);
             background.addTo(map);
@@ -642,6 +779,10 @@
         ajaxResults();
     </script>
     <script src="main.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+
 </body>
 
 </html>

@@ -29,6 +29,78 @@ if (array_key_exists("Authorization", $headers) || array_key_exists("authorizati
     exit(1);
 }
 
+function curl_get_contents($url)
+{
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    $data = curl_exec($ch);
+    curl_close($ch);
+    return $data;
+}
+
+$database = new Database();
+$db = $database->getConnexion();
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+//nettoyer la table 
+
+$stmt = $db->prepare("DELETE from resource");
+$stmt->execute();
+//récupérer la liste des codes districts 
+
+$st = $db->prepare("SELECT * FROM centroids79districts");
+$st->execute();
+if ($st->rowCount() > 0) {
+    $data = $st->fetchAll(PDO::FETCH_ASSOC);
+    $data = $data;
+}
+$districts = [];
+if (is_array($data) || is_object($data)) {
+    foreach ($data as $key => $value) {
+        array_push($districts, "msas_" . $data[$key]["code_district"]);
+    }
+}
+
+function insertData($data, $id)
+{
+    $database = new Database();
+    $db = $database->getConnexion();
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    foreach ($data as $key => $value) {
+        $context = [
+            "model" => $data[$key]->model,
+            "nb_tablets" => $data[$key]->count,
+            "id_district_data" => $id
+        ];
+        $stmt = $db->prepare("INSERT into resource(model, number_of_tablets_used,id_district_data) VALUES(:model,:nb_tablets,:id_district_data)");
+        $stmt->execute($context);
+    }
+}
+
+foreach ($districts as $key => $district) {
+    //récupération des données
+    $api_url = "https://teranga-mobile.pasteur.sn/api/v1/stats/mobile_device/aggregate/count?team_uid=" . strtolower($district);
+    $json_data = curl_get_contents($api_url);
+
+    $response_data = json_decode($json_data);
+    //traitement des données
+    if ($response_data->status == "ok") {
+        $resources = [];
+        foreach ($response_data->data as $key => $value) {
+            array_push($resources, $response_data->data[$key]);
+        }
+    }
+    $id_district = $data[$key]["id_district"];
+    insertData($resources, $id);
+}
+
+
+
+
 function addResource($data)
 {
     $missing_fields = [];
@@ -61,7 +133,9 @@ function addResource($data)
             $number_of_tablets_used = $data["number_of_tablets_used"];
         }
         try {
-            $stmt = $db->prepare("INSERT INTO resource(internet_volume,number_of_tablets_used,id_district_data) VALUES(:internet_volume,:number_of_tablets_used,:id_district_data)");
+            $stmt = $db->prepare("INSERT INTO resource(internet_volume,number_of_tablets_used,id_district_data) VALUES(:internet_volume,:number_of_tablets_used,:id_district_data) WHERE NOT EXISTS (
+                SELECT * FROM resource WHERE id_district = :id_district
+            )");
             $stmt->bindValue(':internet_volume', $internet_volume, PDO::PARAM_STR);
             $stmt->bindValue(':number_of_tablets_used', $number_of_tablets_used, PDO::PARAM_INT);
             $stmt->bindValue(':id_district_data', $data["id_district_data"], PDO::PARAM_INT);
