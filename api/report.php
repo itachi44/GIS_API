@@ -29,8 +29,8 @@ if (array_key_exists("Authorization", $headers) || array_key_exists("authorizati
     exit(1);
 }
 
-// id_user et id_centroid seront récupérés à la connexion de l'utilisateur et seront stocker dans le client pour être envoyé dans la requête
-// MCD_name, MCD_tel, used_range, received_sample, tested_sample, non-conforming_sample seront envoyées par le client après avoir fait le fetching depuis une api externe
+
+
 function addReport($data)
 {
     $missing_fields = [];
