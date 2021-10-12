@@ -45,10 +45,7 @@ $database = new Database();
 $db = $database->getConnexion();
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-//nettoyer la table 
 
-$stmt = $db->prepare("DELETE from resource");
-$stmt->execute();
 //récupérer la liste des codes districts 
 
 $st = $db->prepare("SELECT * FROM centroids79districts");
@@ -76,9 +73,25 @@ function insertData($data, $id)
             "nb_tablets" => $data[$key]->count,
             "id_district_data" => $id
         ];
-        $stmt = $db->prepare("INSERT into resource(model, number_of_tablets_used,id_district_data) VALUES(:model,:nb_tablets,:id_district_data)");
+        //TODO insert if not exists
+        $stmt = $db->prepare("REPLACE into resource(model, number_of_tablets_used,id_district_data) VALUES(:model,:nb_tablets,:id_district_data)");
         $stmt->execute($context);
     }
+}
+
+function getIdDistrict($district_code)
+{
+    $code = strtoupper(explode("_", $district_code)[1]);
+    $database = new Database();
+    $db = $database->getConnexion();
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $stmt = $db->prepare("SELECT * from centroids79districts WHERE code_district=:code");
+    $stmt->execute(["code" => $code]);
+    if ($stmt->rowCount()) {
+        $infos = $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    return $infos["id_district"];
 }
 
 foreach ($districts as $key => $district) {
@@ -87,6 +100,7 @@ foreach ($districts as $key => $district) {
     $json_data = curl_get_contents($api_url);
 
     $response_data = json_decode($json_data);
+
     //traitement des données
     if ($response_data->status == "ok") {
         $resources = [];
@@ -94,8 +108,9 @@ foreach ($districts as $key => $district) {
             array_push($resources, $response_data->data[$key]);
         }
     }
-    $id_district = $data[$key]["id_district"];
-    insertData($resources, $id);
+
+    $id_district = getIdDistrict($district);
+    insertData($resources, $id_district);
 }
 
 
