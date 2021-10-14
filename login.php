@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,11 +11,12 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="assets/css/login.css">
 </head>
+
 <body>
   <main>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-6 login-section-wrapper">
+        <div style="margin-left:30%" class="col-sm-6 login-section-wrapper">
           <div class="brand-wrapper">
             <img src="icon/login-logo.png" alt="logo" class="logo">
             <h1 class="title">Suivi du déploiement</h1>
@@ -23,11 +25,11 @@
             <h1 class="login-title">Log in</h1>
             <form action="#!">
               <div class="form-group">
-                <label for="email">Email</label>
+                <label style="color:black;" for="email">Email</label>
                 <input type="email" name="email" id="email" class="form-control" placeholder="email@example.com">
               </div>
               <div class="form-group mb-4">
-                <label for="password">Mot de passe</label>
+                <label style="color:black;" for="password">Mot de passe</label>
                 <input type="password" name="password" id="password" class="form-control" placeholder="entrer votre mot de passe">
               </div>
               <input name="login" id="login" class="btn btn-block login-btn" type="button" value="Login">
@@ -45,4 +47,5 @@
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </body>
+
 </html>
