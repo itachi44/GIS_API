@@ -30,3 +30,28 @@ $(document).ready(function () {
         ]
     });
 });
+
+document.addEventListener("click", function () {
+    let elt = document.activeElement;
+    if (elt.classList[0] == "details") {
+        let district_name = elt.parentElement.children[4].textContent.split(":")[1].trim();
+        $.ajax({
+            type: 'GET',
+            contentType: 'application/json',
+            url: 'getDistrictDetails.php?district=' + district_name,
+            success: function (data) {
+                let response = JSON.parse(data);
+                console.log(response);
+                //document.getElementById("mcd_name").textContent =;
+
+            },
+            error: function (error) {
+                console.log(error);
+            },
+
+        });
+
+    }
+
+
+});

@@ -50,7 +50,7 @@
                                                 <div class="col mr-2">
                                                     <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                                         MCD infos:</div>
-                                                    <div class="h6 mb-0 font-weight-bold text-gray-800">info1 :</div>
+                                                    <div id="mcd_name" class="h6 mb-0 font-weight-bold text-gray-800">info1 :</div>
                                                     <div class="h6 mb-0 font-weight-bold text-gray-800">info2 :</div>
                                                     <div class="h6 mb-0 font-weight-bold text-gray-800">info3 :</div>
                                                     <div class="h6 mb-0 font-weight-bold text-gray-800">...</div>
@@ -581,7 +581,6 @@
                             map.closePopup();
                             //we get coodinates
                             let district_name = btn.parentElement.parentElement.children[4].textContent.split(":")[1].trim();
-                            console.log(district_name);
                             let coordinates = getCoordinates(district_name, districts);
                             let current_lat = coordinates[0];
                             let current_lng = coordinates[1];
@@ -782,7 +781,6 @@
     <script src="main.js"></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-
 
 </body>
 
